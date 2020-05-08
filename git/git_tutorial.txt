@@ -1,0 +1,172 @@
+========================================================
+                    Basic concepts
+========================================================
+
+# Initialize a repository
+    > Using this command inside a folder, we will create a local git repository. A folder called ".git" will be placed into the mentioned folder. Removing this ".git" we remove the entire git local repository management.
+    $ git init
+
+# Ignoring files on git
+    1- Creates a file called ".gitignore"
+    2- Put all the file names that you don't want to be versioned into this file
+    > Git recognizes wildcards: Ex: *.py 
+    > You must add one item per line
+
+# Git stages
+    > Git has three different stages, they are:
+        - Working Directory: local repository containing your modified files
+        - Staging Area: When we add a new file to git, this file will be in this area, ready to be committed
+        - .git Directory: After the commit, the files goes to the local “.git” repository
+
+========================================================
+                    Commands
+========================================================
+# Cloning a remote repository
+    $ git clone <url> <where to clone>
+
+
+# Showing the status
+    > There two basic forms to do this:
+        - Show untracked and tracked files of the current branch
+            $ git status
+        - Show just tracked files of the current branch
+            $ git status -uno
+
+# Showing git configurations
+    $ git config --list
+
+# Removing files
+    > Removing a file from the Staging Area
+        $ git checkout <file-name>
+    > Removing all untracked files
+        - This command remove from the disk all files that are not versioned, so beware of it before use this command. The -d option is to remove directories also.
+        $ git clean -fd
+
+
+# Adding new files or files that has been changed
+    > Every time that you want to submit a new or a modified file(s) it will be necessary to use this command. After this, the files will be transferred from your working area to your tagring area.
+    > Add all
+        git add -A
+    > Add a single file
+        git add <file name>
+    > Add all files modified and ignore untracked ones
+        git add -u
+
+# Reverting/Removing a local file changes
+    > Removing add changes from stage area
+        $ git checkout -- <file name>
+    > Unstage files
+        - This command unstage the local commit and files, but does not remove them
+        $ git reset --soft HEAD^
+    > Remove a local commit and go back to the master, remove files
+        $ git reset --hard origin/master 
+            OR
+        $ git reset --hard <COMMIT -ID>
+            * This is the ID given with the command: git log --oneline
+
+# Commiting changes
+    > Committing added changes/files
+        - Passaing a massage
+            $ git commit -m "your message here"
+        - Editing the massage on deafult editor
+            $ git commit
+
+    > Committing and adding with a single step
+        - Executing “git add” and “git commit -m "your message here" in a single command
+            $ git commit -a -m "your message here"
+        - Executing a "git add" and "git commit" in a single command
+            $ git commit -a
+
+    > Amending a commit
+        - This command sends a new patch to the last change ID used in the previous git push ~.
+            $ git commit --amend
+
+# Showing commit logs
+    > Seing log of a specific commit
+        $ git log <commit hash>
+    > Seing commit log's in one line
+        $ git log --oneline --decorate
+    > Seing commit log's and branch's as a graph on terminal
+        $ git log --graph --all --decorate --oneline
+        $ git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all --decorate
+
+
+
+# Git Diff
+    > This commands will display the differences between the local version and the version that is in the remote repo on the screen
+        $ git diff
+    > You can also use the merge tool pointed out at your git config global:
+        $ git difftool <ver1 ver2>
+
+# Branchs
+    > Showing local and remove branchs
+        - This command does not search for remote upgrades. To reflect the current state of the remote branchs, run "git pull" before.
+            $ git branch -aavvvvvv
+
+    > Checking out a branch to work on it
+        $ git checkout <branch name>
+    > Checking out a not yet merged commit/patch and synchronize it with the remote branch
+        0- Navigate to the git repo using terminal
+        1- Go to the desired commit git on git web brownse and click in (...)
+        2- Copy the git checkout command, ex: git fetch "ssh://tc.lbarros@gerrit.padtec.com.br:29418/fw/tools/AtualizadorFw" refs/changes/73/26573/3 && git checkout FETCH_HEAD
+        3- Paste it into the terminal
+        4- Finally: git checkout -b <desired branch name>
+        After all this steps, you will have your commit/patch associated with the remote branch and will be able to merge, rebase, commit and etc
+
+    > Synchronizing a local branch to the last version pointed in the remote repository without apply the modifications
+        $ git fetch
+    > Synchronizing a local branch with its correspondent remote
+        $ git pull
+    > Synchronizing a local branch before commit with its correspondent remote
+        $ git pull --rebase
+        
+    > Creating a branch from current branch HEAD version
+        $ git branch <branch name>
+    > Creating a local branch from a specific change of git
+        $ git branch <branch name> <commit hash>
+    > Creating a local branch and synchronizing it with the the remote branch:
+        $ git checkout -b <branch name> origin/<remote branch name>
+        
+    > Merging branchs ????? Check it
+        $ git pull origin <branch name>
+        $ git merge <other branch-name>
+        
+    > Solving merge conflicts
+        $ git mergetool
+        
+    > Renaming a local branch
+        $ git branch -m <new name>
+        
+    > Removing branchs
+        - Removing a local branch
+            $ git branch -d <branch name>
+        - Removing <branch-name> from remote repository
+            $ git push origin --delete <branch-name>
+
+    > Reverting a remote commit already merged
+        - This process will create a new commit that will undo the changes applied by the commit that you want to be reverted.
+            * After the above process, it is necessary to send the modification to the remote branch, ex: git push origin master
+            $ git revert <commit_hash>
+            
+    
+    > Sending changes to the remote repository
+        - Send modificatioins on <branch name> to its correspondent remote branch without pass through gerrit/bibucket check
+            $ git push origin <branch name>
+        - Send local modifications on <branch name> to gerrit review
+            $ git push origin HEAD:refs/for/<branch name>
+    
+# Tags
+    > Creating a tag based on current branch HEAD version
+        $ git tag -a <tag version/name> -m "Message here"
+    > Creating a tag based on a specific branch change/revision
+        $ git tag -a <tag version/name> <revision base, ex: 9fceb02> -m "Message here"
+        
+    > Pushng a single tag
+        $ git push origin <tag_name>
+    > Pushing all local tags to the remote repository
+        $ git push --tags
+
+    > Show all the tags
+        $ git tag
+    > Checkout a tag to a local branch
+        $ git checkout -b <branch name> <tag version/name>
