@@ -105,13 +105,23 @@
 
     > Checking out a branch to work on it
         $ git checkout <branch name>
-    > Checking out a not yet merged commit/patch and synchronize it with the remote branch
+        
+    > Checking out a not yet merged commit/patch set - METHOD ONE
         0- Navigate to the git repo using terminal
-        1- Go to the desired commit git on git web brownse and click in (...)
-        2- Copy the git checkout command, ex: git fetch "ssh://tc.lbarros@gerrit.padtec.com.br:29418/fw/tools/AtualizadorFw" refs/changes/73/26573/3 && git checkout FETCH_HEAD
+        1- Click on desired git commit on git web brownse and than click in (...) at the right side of page, by the side of EDIT
+        2- Copy "Download patch set" command, ex: git fetch "ssh://tc.lbarros@gerrit.padtec.com.br:29418/fw/tools/AtualizadorFw" refs/changes/73/26573/3 && git checkout FETCH_HEAD
+            - After this step, you will have a branch deatached from any other branch.
         3- Paste it into the terminal
         4- Finally: git checkout -b <desired branch name>
-        After all this steps, you will have your commit/patch associated with the remote branch and will be able to merge, rebase, commit and etc
+        After all this steps, you will be able to merge, rebase, send another patch set and etc
+        
+    > Checking out a not yet merged commit/patch set and syncronize it with a branch - METHOD TWO
+        0- Navigate to the git repo using terminal
+        1- Checkout the same parent commit used by the commi not yet merged
+        2- Click on desired git commit on git web brownse and than click in (...) at the right side of page, by the side of EDIT
+        3- Copy "Pull" command, ex: git pull "ssh://tc.lbarros@gerrit.padtec.com.br:29418/es/proj/roadm_vybrid/lib/devices" refs/changes/34/37734/3
+        4- Paste it into the terminal
+        After all this steps, you will be able to merge, rebase, send another patch set and etc
 
     > Synchronizing a local branch to the last version pointed in the remote repository without apply the modifications
         $ git fetch
@@ -127,9 +137,9 @@
     > Creating a local branch and synchronizing it with the the remote branch:
         $ git checkout -b <branch name> origin/<remote branch name>
         
-    > Merging branchs ????? Check it
-        $ git pull origin <branch name>
-        $ git merge <other branch-name>
+    > Merging branchs
+        $ git checkout <branch name>
+        $ git merge <branch-name to be merged>
         
     > Solving merge conflicts
         $ git mergetool
