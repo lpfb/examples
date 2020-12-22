@@ -135,7 +135,7 @@ xrandr --output HDMI-1 --mode 1920x1080 -r 60
 rm -rf ~/.local/share/Trash/*
 ```
 
-# Supend/hibernate PC
+# Supending/hibernating PC
 **Referência:** [Link](https://www.cyberciti.biz/faq/linux-command-to-suspend-hibernate-laptop-netbook-pc/)
 - Suspending PC (using RAM)
 ```sh
@@ -150,3 +150,32 @@ sudo apt-get clean && sudo apt-get update
 ```sh
 sudo apt-get remove --auto-remove <package name>
 ```
+
+# Logout from terminal
+```sh
+sudo pkill -u username
+```
+# Varrendo IP's da rede local e checando dispositivos conectados
+Exemplo para as configurações de rede a seguir:
+**IP PC:** 192.168.0.x
+**netmask:** 255.255.255.0
+```sh
+sudo nmap -sn 192.168.0.0/24
+```
+
+# Criando pasta e arquivos temporários, ou seja, desaparecem quando reinicia o computador
+.
+
+## Diretório
+Cria uma pasta temporária e informa em STD out o nome da pasta criada. É preciso passar pelo menos três letras 'X' maísculas depois do ponto após o nome do arquivo, esses 'x' serão usados para gerar um 'ID' pseudo-aleatório para evitar problemas de conflito de nome.
+```sh
+mktemp -d tmp.XXX
+```
+- Obs: O nome da pasta não precisa ser obrigatóriamente tmp.
+
+## Arquivo
+Cria um arquivo temporário e informa em STD out o nome do arquivo criado. É preciso passar pelo menos três letras 'X' maísculas depois do ponto após o nome do arquivo, esses 'x' serão usados para gerar um 'ID' pseudo-aleatório para evitar problemas de conflito de nome.
+```sh
+mktemp tmp.XXX
+```
+- Obs: O nome da pasta não precisa ser obrigatóriamente tmp.

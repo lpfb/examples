@@ -1,0 +1,39 @@
+#include <fstream>
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    int myfile_size;
+	char * memblock;
+	streampos fileSize;
+
+	cout << "Openning File..." << endl;
+	ifstream file ("afile.dat", ios::in | ios::binary | ios::ate); // Open file in read mode, binary format and position the file pointer at the end of file
+	if (file.is_open())
+	{
+		cout << "Getting File size..." << endl;
+		fileSize = file.tellg();
+		myfile_size = int(fileSize);
+
+		cout << "	#Size is: " << myfile_size << " bytes.\n";
+
+		memblock = new char [fileSize]; // Allocating memory to sotre all file content
+		file.seekg (0, ios::beg); // Goto the file begin
+
+		cout << "Getting File content..." << endl;
+		file.read (memblock, fileSize);
+
+		for ( int i = 0; i < fileSize; i++) {
+			cout << (unsigned int)(memblock[i]) << endl;
+		}
+
+
+	}
+
+	file.close();
+	delete memblock; // free memory
+    return 0;
+
+}
