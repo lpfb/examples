@@ -3,6 +3,23 @@
 du -Sh | sort -rh | head -5
 ```
 
+# C language library configurations
+You can use a '.a' (static) or '.o' file as a library. The file must follow the pattern lib~.so, at the end you can use so.x.y.z, where x, y and z are library versions.
+
+## Listing Linux library paths
+```sh
+ldconfig -v
+```
+## Main library paths
+- /usr/lib
+- /usr/lib/x86_64-linux-gnu
+- /usr/local/lib
+- /lib/x86_64-linux-gnu
+
+## Setting Library environment variable
+```sh
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/your/.a or .o/library
+```
 # Symbolic Link
 ```sh
 ln -s [target file] [Symbolic filename]
@@ -27,7 +44,6 @@ find . -path ./node_modules -prune -false -o -name '*.md'
     - -name pattern: used to specify the pattern/file to be searched
 
 # Journal
-.
 
 ## Changing jornoul configurations
 Some references:
@@ -62,18 +78,23 @@ sudo journalctl --vacuum-time=1s
 
 # Creating linux socat
 This can be used to forward TCP communication from one pc/board to another one.
-
 ```sh
 sudo socat TCP-LISTEN:<host port>,fork TCP:<target ip>:<target port>
 ```
-
 Where:
 - host port: it is the port of the host that you will desire to open to foward the comunication to the target
 - targe ip: IP of the target board/pc
 - target port: Port of the target pc/board. Note: port 22 must be used in case of ssh communication.
 
 # Grep
-- Excluindo alguns diretórios da busca e listando apenas os arquivos sem printar conteúdo
+Opções interessantes do grep:
+    - -i: ignora se a letra é maiúscula ou minúscula
+    - -r: busca nos diretórios de forma recursiva
+    - -l: lista apenas os arquivos que coincidem e não o texto encontrado nesses arquivos
+    - --exclude-dir: exlui um ou mais diretórios da busca
+    - -I: Não busca co conteúdo do texto(string) em arquivos binários
+
+## Excluindo alguns diretórios da busca e listando apenas os arquivos sem printar conteúdo
 ```sh
  grep -irl --exclude-dir={dir1,dir2,dir3} "TEXTO A SER PROCURADO"
 ```
@@ -82,6 +103,13 @@ Where:
     - -r: busca nos diretórios de forma recursiva
     - -l: lista apenas os arquivos que coincidem e não o texto encontrado nesses arquivos
     - --exclude-dir: exlui um ou mais diretórios da busca
+
+## Excluindo os arquivos binários da busca
+```sh
+grep -I "TEXTO A SER PROCURADO"
+```
+- Onde:
+    - -I: Não busca co conteúdo do texto(string) em arquivos binários
 
 # SSH
 .
