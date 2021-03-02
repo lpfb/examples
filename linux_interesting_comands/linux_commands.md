@@ -33,6 +33,7 @@ find . -type d \( -path ./node_modules -o -path ./out -o -name ./dist \) -prune 
         - -path ./dir_name: used for the current directory level
         - -name dir_name: used to exclude name in all levels searched
     - -name pattern: used to specify the pattern/file to be searched
+    - '-o' is used as an or expression to add mor dirs 
 
 - Using find to exclude a directory name from the search
 ```sh
@@ -207,3 +208,9 @@ Cria um arquivo temporário e informa em STD out o nome do arquivo criado. É pr
 mktemp tmp.XXX
 ```
 - Obs: O nome da pasta não precisa ser obrigatóriamente tmp.
+
+# Configurando Ubuntu para usar Workspaces com app's separados
+Rodar a linha de comando a seguir no terminal
+```sh
+gsettings set org.gnome.shell.extensions.dash-to-dock isolate-workspaces true
+```

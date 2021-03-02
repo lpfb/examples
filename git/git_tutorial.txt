@@ -42,6 +42,13 @@
         - This command remove from the disk all files that are not versioned, so beware of it before use this command. The -d option is to remove directories also.
         $ git clean -fd
 
+# Git Stash
+    > Adding modified files to stash list
+        $ git stash
+    > Applying stashed files into current change and removing it from stash list
+        $ git stash pop
+    > Applying stashed files into current change but does not removing it from stash list
+        $ git stash apply
 
 # Adding new files or files that has been changed
     > Every time that you want to submit a new or a modified file(s) it will be necessary to use this command. After this, the files will be transferred from your working area to your tagring area.
