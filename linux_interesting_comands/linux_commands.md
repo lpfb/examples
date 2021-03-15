@@ -214,3 +214,9 @@ Rodar a linha de comando a seguir no terminal
 ```sh
 gsettings set org.gnome.shell.extensions.dash-to-dock isolate-workspaces true
 ```
+
+# Criando um novo usuario (ex: tc.lbarros)
+```sh
+sudo adduser tc.lbarros --force-badname #Devido ao ponto no meio do nome eh preciso usar o force-badname
+sudo usermod -aG sudo tc.lbarros #Adiciona o usuario ao gruipo root
+```

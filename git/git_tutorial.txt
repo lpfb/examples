@@ -113,7 +113,7 @@
     > Checking out a branch to work on it
         $ git checkout <branch name>
         
-    > Checking out a not yet merged commit/patch set - METHOD ONE
+    > Checking out a not yet merged commit/patch set
         0- Navigate to the git repo using terminal
         1- Click on desired git commit on git web brownse and than click in (...) at the right side of page, by the side of EDIT
         2- Copy "Download patch set" command, ex: git fetch "ssh://tc.lbarros@gerrit.padtec.com.br:29418/fw/tools/AtualizadorFw" refs/changes/73/26573/3 && git checkout FETCH_HEAD
@@ -123,12 +123,12 @@
         After all this steps, you will be able to merge, rebase, send another patch set and etc
         
     > Checking out a not yet merged commit/patch set and syncronize it with a branch - METHOD TWO
-        0- Navigate to the git repo using terminal
-        1- Checkout the same parent commit used by the commi not yet merged
-        2- Click on desired git commit on git web brownse and than click in (...) at the right side of page, by the side of EDIT
-        3- Copy "Pull" command, ex: git pull "ssh://tc.lbarros@gerrit.padtec.com.br:29418/es/proj/roadm_vybrid/lib/devices" refs/changes/34/37734/3
+        0- Navigate to the git repo that you cloned
+        1- Click on desired git commit on gerrit web brownser and than click in (...) at the right side of page, by the side of EDIT
+        2- Click on Download Patch
+        3- Copy "Branch" command, ex: git fetch ssh://tc.lbarros@gerrit.padtec.com.br:29418/es/proj/wss-single/app refs/changes/07/45607/9 && git checkout -b
         4- Paste it into the terminal
-        After all this steps, you will be able to merge, rebase, send another patch set and etc
+        After all this steps, you will be able to merge, rebase, send another patch set and etc and a new local branch will be created
 
     > Synchronizing a local branch to the last version pointed in the remote repository without apply the modifications
         $ git fetch
@@ -171,6 +171,24 @@
             $ git push origin <branch name>
         - Send local modifications on <branch name> to gerrit review
             $ git push origin HEAD:refs/for/<branch name>
+            
+#TODO: write it better
+# Creating a local branch based on a change and synchronizing it with a branch
+    0- Navigate to the git repo that you cloned
+    1- Click on desired git commit on gerrit web brownser and than click in (...) at the right side of page, by the side of EDIT
+    2- Click on Download Patch
+    3- Copy "Checkout" command, ex: git fetch ssh://tc.lbarros@gerrit.padtec.com.br:29418/es/proj/wss-single/app refs/changes/07/45607/10 && git checkout FETCH_HEAD
+    4- After this step, you will be deatached from any branch
+    5- Create a local branch: git branch -b <desired branch name>
+    6 Synchronize it with remote branch: git branch --set-upstream-to=origin/<remote branch name> <desired branch name>
+
+# Rebasing a local Synchronized branch with its parent
+    0- Inside your local branch
+    1- git fecth # this will get latest modifications of remote tracked branch, but not aplly it
+    2- git rebase # this will apply the modifications
+    3- Then you can resolve the current conflits, if there is any. After resolve the conflit on files, use git add on this files.
+    4- Than use: git reabse --continue
+    5- Now your local modifications will rebased using the new parant branch commit
     
 # Tags
     > Creating a tag based on current branch HEAD version
