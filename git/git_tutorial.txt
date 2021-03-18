@@ -106,13 +106,18 @@
         $ git difftool <ver1 ver2>
 
 # Branchs
+    > Reseting local branch to match origing (remote)
+        - WARNING: This process will REMOVE ALL local modifications
+        $ git fetch origin
+        $ git reset --hard origin/<remote branch name>
+
     > Showing local and remove branchs
         - This command does not search for remote upgrades. To reflect the current state of the remote branchs, run "git pull" before.
             $ git branch -aavvvvvv
 
     > Checking out a branch to work on it
         $ git checkout <branch name>
-        
+
     > Checking out a not yet merged commit/patch set
         0- Navigate to the git repo using terminal
         1- Click on desired git commit on git web brownse and than click in (...) at the right side of page, by the side of EDIT
@@ -121,7 +126,7 @@
         3- Paste it into the terminal
         4- Finally: git checkout -b <desired branch name>
         After all this steps, you will be able to merge, rebase, send another patch set and etc
-        
+
     > Checking out a not yet merged commit/patch set and syncronize it with a branch - METHOD TWO
         0- Navigate to the git repo that you cloned
         1- Click on desired git commit on gerrit web brownser and than click in (...) at the right side of page, by the side of EDIT
@@ -136,24 +141,24 @@
         $ git pull
     > Synchronizing a local branch before commit with its correspondent remote
         $ git pull --rebase
-        
+
     > Creating a branch from current branch HEAD version
         $ git branch <branch name>
     > Creating a local branch from a specific change of git
         $ git branch <branch name> <commit hash>
     > Creating a local branch and synchronizing it with the the remote branch:
         $ git checkout -b <branch name> origin/<remote branch name>
-        
+
     > Merging branchs
         $ git checkout <branch name>
         $ git merge <branch-name to be merged>
-        
+
     > Solving merge conflicts
         $ git mergetool
-        
+
     > Renaming a local branch
         $ git branch -m <new name>
-        
+
     > Removing branchs
         - Removing a local branch
             $ git branch -d <branch name>
@@ -164,14 +169,14 @@
         - This process will create a new commit that will undo the changes applied by the commit that you want to be reverted.
             * After the above process, it is necessary to send the modification to the remote branch, ex: git push origin master
             $ git revert <commit_hash>
-            
-    
+
+
     > Sending changes to the remote repository
         - Send modificatioins on <branch name> to its correspondent remote branch without pass through gerrit/bibucket check
             $ git push origin <branch name>
         - Send local modifications on <branch name> to gerrit review
             $ git push origin HEAD:refs/for/<branch name>
-            
+
 #TODO: write it better
 # Creating a local branch based on a change and synchronizing it with a branch
     0- Navigate to the git repo that you cloned
@@ -189,13 +194,13 @@
     3- Then you can resolve the current conflits, if there is any. After resolve the conflit on files, use git add on this files.
     4- Than use: git reabse --continue
     5- Now your local modifications will rebased using the new parant branch commit
-    
+
 # Tags
     > Creating a tag based on current branch HEAD version
         $ git tag -a <tag version/name> -m "Message here"
     > Creating a tag based on a specific branch change/revision
         $ git tag -a <tag version/name> <revision base, ex: 9fceb02> -m "Message here"
-        
+
     > Pushng a single tag
         $ git push origin <tag_name>
     > Pushing all local tags to the remote repository
