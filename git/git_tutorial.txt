@@ -191,7 +191,7 @@
     0- Inside your local branch
     1- git fecth # this will get latest modifications of remote tracked branch, but not aplly it
     2- git rebase # this will apply the modifications
-    3- Then you can resolve the current conflits, if there is any. After resolve the conflit on files, use git add on this files.
+    3- Then you can resolve the current conflits, if there is any. After resolve the conflit on files, use git add on the files.
     4- Than use: git reabse --continue
     5- Now your local modifications will rebased using the new parant branch commit
 
