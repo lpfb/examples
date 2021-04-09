@@ -2,6 +2,11 @@
 ```sh
 du -Sh | sort -rh | head -5
 ```
+# Managing install librarys (apititude)
+To do this one can use apititude
+
+## Install
+sudo apt install apititude
 
 # C language library configurations
 You can use a '.a' (static) or '.o' file as a library. The file must follow the pattern lib~.so, at the end you can use so.x.y.z, where x, y and z are library versions.
@@ -171,13 +176,30 @@ rm -rf ~/.local/share/Trash/*
 systemctl suspend
 ```
 # Instalação de pacotes Ubuntu
-- Limpando o apt install:
+**Referência:** [link](https://www.vivaolinux.com.br/dica/Tutorial-basico-do-APTGET)
+- Para atualizar a lista local de pacotes
 ```sh
-sudo apt-get clean && sudo apt-get update
+sudo apt-get update
+```
+- Para instalar todas as atualizações disponíveis
+```sh
+sudo apt-get upgrade
+```
+- Para remover um pacote
+```sh
+sudo apt-get remove <nomedopacote>
+```
+- Para remover completamente um pacote e arquivos ou registros de configuração
+```sh
+sudo apt-get --purge remove <nomedopacote>
 ```
 - Removendo um pacote e suas dependências:
 ```sh
 sudo apt-get remove --auto-remove <package name>
+```
+- Limpando o apt install
+```sh
+sudo apt-get clean && sudo apt-get update
 ```
 
 # Logout from terminal
@@ -201,6 +223,7 @@ Cria uma pasta temporária e informa em STD out o nome da pasta criada. É preci
 mktemp -d tmp.XXX
 ```
 - Obs: O nome da pasta não precisa ser obrigatóriamente tmp.
+- Obs2: Se o nome do arquivo for omitido, o sistema vai escolher automaticamente
 
 ## Arquivo
 Cria um arquivo temporário e informa em STD out o nome do arquivo criado. É preciso passar pelo menos três letras 'X' maísculas depois do ponto após o nome do arquivo, esses 'x' serão usados para gerar um 'ID' pseudo-aleatório para evitar problemas de conflito de nome.
