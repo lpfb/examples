@@ -95,10 +95,11 @@ Where:
 # Grep
 Opções interessantes do grep:
     - -i: ignora se a letra é maiúscula ou minúscula
+    - -n: informa a linha do arquivo onde foi encontrado o padrao buscado
     - -r: busca nos diretórios de forma recursiva
     - -l: lista apenas os arquivos que coincidem e não o texto encontrado nesses arquivos
     - --exclude-dir: exlui um ou mais diretórios da busca
-    - -I: Não busca co conteúdo do texto(string) em arquivos binários
+    - -I: Exclui arquivos binarios da busca
 
 ## Excluindo alguns diretórios da busca e listando apenas os arquivos sem printar conteúdo
 ```sh
@@ -128,7 +129,7 @@ sudo apt install sshpass
 ```
 - Running command
 ```sh
-sshpass -p <password of remote PC> ssh <remove user>@<remote pc ip> << EOF
+sshpass -p <password of remote PC> ssh <remote user>@<remote pc IP> << EOF
     cd
     touch sshpass_teste.txt
     cho "Testado com sucesso" > sshpass_teste.txt
@@ -158,11 +159,11 @@ EOF
 ```sh
 xrandr
 ```
-- Alterando a resolução de uma determinada interface de vídeo
+- Alterando a resolução e o frame rate de uma determinada interface de vídeo
 ```sh
 xrandr --output HDMI-1 --mode 1920x1080 -r 60
 ```
-    - Torque 1920x1080 pela resolução desejada, 60 pelo frame rate desejado e HDMI-1 pela interface de vídeo desejada
+    - Troque 1920x1080 pela resolução desejada, 60 pelo frame rate desejado e HDMI-1 pela interface de vídeo desejada
  
 # Empty trash in terminal
 ```sh
