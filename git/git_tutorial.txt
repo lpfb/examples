@@ -114,6 +114,9 @@
     > Showing local and remove branchs
         - This command does not search for remote upgrades. To reflect the current state of the remote branchs, run "git pull" before.
             $ git branch -aavvvvvv
+            
+    > Synchronizing local branch to remote repo branch
+        $ git branch --set-upstream-to=origin/<remote branch name>
 
     > Checking out a branch to work on it
         $ git checkout <branch name>
@@ -187,13 +190,26 @@
     5- Create a local branch: git branch -b <desired branch name>
     6 Synchronize it with remote branch: git branch --set-upstream-to=origin/<remote branch name> <desired branch name>
 
-# Rebasing a local Synchronized branch with its parent
-    0- Inside your local branch
-    1- git fecth # this will get latest modifications of remote tracked branch, but not aplly it
-    2- git rebase # this will apply the modifications
-    3- Then you can resolve the current conflits, if there is any. After resolve the conflit on files, use git add on the files.
-    4- Than use: git reabse --continue
-    5- Now your local modifications will rebased using the new parant branch commit
+# Rebase
+    > Iterative rebase
+        - Reference: https://thoughtbot.com/blog/git-interactive-rebase-squash-amend-rewriting-history
+        - git rebase -i <commit/branch>
+            * Ex: git rebase -i master, rebase current change with master branch.
+        - edit the file that will open reading the messages. If you wat to remove a reference to another commit, just remove it from the list??
+
+    > Rebasing local change with a remote one
+        0- git fetch ssh://tc.lbarros@gerrit.padtec.com.br:29418/es/proj/wss-single/app refs/changes/04/46904/5 && git checkout FETCH_HEAD
+        1- git rebase 18d5ffc e080027
+            > 18d5ffc: change to be applyed
+            > e080027: change to be rebased with 18d5ffc (git fetch)
+    
+    > Rebasing a local Synchronized branch with its parent
+        0- Inside your local branch
+        1- git fecth # this will get latest modifications of remote tracked branch, but not aplly it
+        2- git rebase # this will apply the modifications
+        3- Then you can resolve the current conflits, if there is any. After resolve the conflit on files, use git add on the files.
+        4- Than use: git reabse --continue
+        5- Now your local modifications will rebased using the new parant branch commit
 
 # Tags
     > Creating a tag based on current branch HEAD version
