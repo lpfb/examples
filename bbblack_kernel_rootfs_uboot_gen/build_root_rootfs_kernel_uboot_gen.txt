@@ -1,0 +1,45 @@
+Buildroot instalation
+1. Download buildroot: https://buildroot.org/download.html
+2. Extract it
+
+Interesting directories:
+- configs: board _defconfig files
+    - Beaglebone files: ls -l | grep beagle
+    - beaglebone_defconfig will be used
+- board: contains the list of supported buildroot boards
+    - Beaglebone black: board/beaglebone
+        - Contains configurations and linux patchs necessarys in order to use beaglebone board
+        - readme.txt: informs wich boards are supported by this folder, informs output files and how to compile the complete project (uboot, kernel, rootfs)
+        
+Required packages in order to compile:
+- sudo apt-get install cpio unzip rsync
+        
+Building entire system
+1. Enter in buildroot directory
+2. Generate board default configuration file
+    * make beaglebone_defconfig
+3. Configure what will be generated
+    * make menuconfig
+    1. It is necessary to inform the path of downloaded 
+    x. Using custom git repository: https://github.com/beagleboard/linux
+        - It is necessary to inform the desired version(tag)
+    x. Informas wich board configuration file will be used:
+        - For linux < 4.11, use bb.org
+        - For linux >= 4.11, use omap2plus
+    x. inform load address: 0x80008000
+4. compile kernel
+    * make -j4
+    * IF this erro appear:
+        *** Maybe you need to increase the filesystem size (BR2_TARGET_ROOTFS_EXT2_SIZE)
+        just: with 'make menuconfig' --> 'Filesystem images' --> 'exact size'
+        and change it's value to 200MB
+    * If this erro appear: ERROR: file(zImage) /ERROR: vfat(boot.vfat): could not setup zImage
+        Jus ignore it
+
+As a result, the generated outputs will be stored at:
+    -> buildroot-2021.05/output/images
+    
+Possibly boot errors:
+-> fsck: error 2 (No such file or directory) while executing fsck.ext4 for /dev/mmcblk1p1
+-> fsck exited with status code 8
+    - Correction: 

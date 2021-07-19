@@ -1,0 +1,318 @@
+Reference: https://www.udemy.com/course/linux-device-driver-programming-using-beaglebone-black
+Section1
+
+-----------------Preparing SD card-------------------------
+* For the following steps, gparted was used. This SW requires sudo premission.
+
+1. Create a partition to hold boot
+    > Click with the right botton in SD card, choose new:
+    New Size: 256 MB
+    File System: fat16
+    Create as: primary partition
+    Lable: boot (any name can be used here)
+    > Than click on Add botton
+
+2. Create a partition to hold roots
+    > Click with the right botton in SD card, choose new:
+    Lable: rootfs (any name can be used here)
+    File System: ext4
+    > Than click on Add botton
+    
+3. Click on Apply All Operations (Green V botton)
+
+3. Making boot partition bootable
+    1. Right click on BOOT particion
+    2. Manage Flags
+    3. Select "boot"
+    4. Seçect "lba"
+    5. Click on close
+
+4. Close gparted
+
+When Gpated is closed, the two created partitions will be automatically mounted. Some cases it will not be automatically mounted, if this happend, just remove SD card and connect it back.
+
+----------Dependencies-----------------
+- Software prerequists on Host machine:
+sudo apt-get install build-essential lzop u-boot-tools net-tools bison flex libssl-dev libncurses5-dev libncursesw5-dev unzip chrpath xz-utils minicom wget git-core
+
+- pre-built-images.zip
+This zip contains all boot necessary contents
+
+------------------------------------------
+Filling SD card boot partition with necessary files:
+cd pre-built-images
+cd SD-boot
+cp -a * /media/lbarros/BOOT/
+
+NOTE: You can find the path to SD card BOOT partition running:
+lsblk
+
+============================
+   U-Boot compilation
+============================
+# U-boot donwload
+1. Getting U-Boot
+    * https://ftp.denx.de/pub/u-boot/
+    * Downloaded version: u-boot-2017.05-rc2.tar.bz2
+2. Extracting u-boot
+    * tar xvf u-boot-2017.05-rc2.tar.bz2
+
+# Setting environment variables
+1. export linaro cross compilation path:
+    * export PATH=$PATH:/opt/devel/cross_comp_arm_pru/gcc-linaro-6.3.1-2017.05-x86_64_arm-linux-gnueabihf/bin
+
+# SPL and u-boot compilation
+1. cd u-boot-2017.05-rc
+2. distclean : deletes all the previously compiled/generated object files. 
+    * make CROSS_COMPILE=arm-linux-gnueabihf- distclean
+3. apply board default configuration for uboot
+    * make CROSS_COMPILE=arm-linux-gnueabihf- am335x_boneblack_defconfig
+4. (OPTIONAL) run menuconfig, if you want to do any settings other than default configuration
+    * make CROSS_COMPILE=arm-linux-gnueabihf-  menuconfig
+5. compile (-j8(8 core machine) will instructs the make)
+    * make CROSS_COMPILE=arm-linux-gnueabihf- -j8
+6. Generated files:
+    * u-boot.img
+    * spl/u-boot-spl.bin
+    * MLO
+
+#OFFTOPIC:
+Interesting folders:
+cd u-boot-2017.05-rc2
+-> processor initialization files for Beaglebone  ARM version: arch/arm/cpu/armv7
+-> suported architectures: arch/
+-> suported boards/vendors: board/
+    -> For Ti supoerted boards, there is a folder board/ti
+-> Board configuration files: /config
+    -> Listing AM33x (beaglebone) defconfig files: ls -l am33*
+    -> Beaglebone Black configuration file: am335x_boneblack_defconfig
+
+============================
+   Kernel compilation
+============================
+
+git clone https://github.com/beagleboard/linux linux_bbb
+cd linux_bbb
+git checkout 4.9.36-ti-r46
+
+IMPORTANT: in order to compile kernel, it will be necessary linaro toochain. You can download it from **TODO** and link it using **TODO**
+
+1. Cleanup previous compiled files
+    * make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- distclean
+2. Configuring kernel with board specific configurations/drivers
+    * make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- bb.org_defconfig
+    * NOTE: for 4.11 (kernel???) use omap2plus_defconfig
+3. (OPTION) Change any desired kenel configuration, to remove ou add a driver, for example
+    * make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- menuconfig
+4. Generate kernel image
+    * make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- uImage dtbs LOADADDR=0x80008000 -j4
+5. Generating kernel modules
+    * make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -j4 modules
+6. Installing kernel modules
+    * make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- INSTALL_MOD_PATH=<path of the RFS> modules_install
+
+As a result:
+    Image Name:   Linux-4.9.36
+    Created:      Wed Jul 14 14:08:53 2021
+    Image Type:   ARM Linux Kernel Image (uncompressed)
+    Data Size:    9493792 Bytes = 9271.28 KiB = 9.05 MiB
+    Load Address: 80008000
+    Entry Point:  80008000
+      Kernel: arch/arm/boot/uImage is ready
+
+============================
+ Kernel Modules compilation
+============================
+The dynamically loadable kernel modules (marker as 'M' in kernel menuconfig) are not compiled with kernel. To compile then, just run:
+
+0. cd official_beaglebone_org_linux
+1. Generating kernel modules
+    * make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -j4 modules
+2. Installing kernel modules (AFTER ROOTFSGENERATION)
+    * make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- INSTALL_MOD_PATH=<path of the RFS> modules_install
+    * NOTE: If you are constructing a file system from zero, execute this after file system creation to point to the correct place
+    * Ex:
+    * make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- INSTALL_MOD_PATH=/opt/devel/generated_roofs modules_install
+    
+
+============================
+Generation ROOTFS (BUSY BOX)
+============================
+Busybox is a SW tool that enables you to created a customized root file system with a small footprint.
+With busybox you can find all linux commands, ex: chmod, cat, lsmod, modprob e etc.
+
+->Instalation
+https://busybox.net/downloads/
+download: busybox-1.26.0.tar.bz2  2017-01-10
+tar xvf busybox-1.26.0.tar.bz2
+
+1. Apply default configuration
+    * make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- defconfig
+2. change default settings if you want 
+    * make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- menuconfig
+    1. Enter in first option
+    2. Find "Build BusyBox as a Static binary (no shared libs)" and select it by pression space
+    3. Exit and save 
+3. generate the busy box binary and minimal file system 
+    * make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- CONFIG_PREFIX=<install_path> install
+    * Here, install_path defines the place where busybox will install the generated rootfs, ex:
+    * make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- CONFIG_PREFIX=/opt/devel/generated_roofs install
+4. Installing kernel modules
+    1. cd official_beaglebone_org_linux
+    2. make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- INSTALL_MOD_PATH=/opt/devel/generated_roofs modules_install
+    
+    
+As a result, busybox will generate the following folders at <install_path>:
+    * bin  linuxrc  sbin  usr lib
+It is necessary also to create dev folder:
+mkdir dev proc etc
+As a result, now we have this structure
+    * bin dev  linuxrc  sbin  usr lib proc etc
+These are the minimum directories in order to boot linux
+
+-> Enabling ethernet
+cd /etc
+1. mkdir network
+2. cd network
+3. touch network
+4. Add the folwing content
+    # network card
+    #
+    auto eth0
+    iface eth0 inet static
+    address 192.168.0.254
+    netmask 255.255.255.0
+
+5. The above will enable eth0 with a static IP 192.168.0.254. Now ethernet port will be configured
+
+
+
+================================================
+Compying generated files to SDCARD
+================================================
+# Copy all necessary binarys into a folder in order to organize it
+mkdir compiled_bins
+cd compiled_bins
+cp ../u-boot/u-boot-2017.05-rc2/MLO .
+cp ../u-boot/u-boot-2017.05-rc2/u-boot.img .
+cp ../u-boot/u-boot-2017.05-rc2/u-boot.bin .
+cp ../official_beaglebone_org_linux/arch/arm/boot/uImage .
+cp ../official_beaglebone_org_linux/arch/arm/boot/dts/am335x-boneblack.dtb .
+
+# Create uEnv.txt thiw the following content:
+console=ttyS0,115200n8
+netargs=setenv bootargs console=ttyO0,115200n8 root=/dev/mmcblk0p2 rw rootfstype=ext4 rootwait debug earlyprintk mem=512M
+netboot=echo Booting from microSD ...; setenv autoload no ; load mmc 0:1 ${loadaddr} uImage ; load mmc 0:1 ${fdtaddr} am335x-boneblack.dtb ; run netargs ; bootm ${loadaddr} - ${fdtaddr}
+uenvcmd=run netboot
+
+# Copy compiled_bins content to SDcard BOOT partition
+cd compiled_bins
+cp * /media/lbarros/BOOT/
+
+# Copy generated_roofs content to SDcard ROOTFS partition
+
+
+--------------------------------------------------------------------------------
+---------------------------------------------draft-------------------------------
+================================================
+Running ROOTFS and linux over TFTP on beaglebone
+================================================
+# Preparing host PC
+1. sudo apt-get install xinetd tftp tftpd nfs-kernel-server
+2. sudo vim /etc/xinetd.d/tftp
+    Add this:
+    service tftp
+    {
+        protocol = udp
+        port = 69
+        socket_type = dgram
+        wait = yes
+        user = nobody
+        server = /usr/sbin/in.tftpd
+        server_args = /var/lib/tftpboot -s
+        disable = no
+    }
+3. sudo chmod -R 777 /var/lib/tftpboot
+4. sudo chown -R nobody /var/lib/tftpboot
+5. sudo /etc/init.d/xinetd restart
+6. sudo nvim /etc/exports
+    * Add this:
+    /srv/nfs/bbb 192.168.7.2(rw,sync,no_root_squash,no_subtree_check)
+7. sudo exportfs -a
+8. sudo exportfs -rv
+9. sudo service nfs-kernel-server restart
+10. Checking nfs status
+    * sudo service nfs-kernel-server status
+
+# Creating uEnv.txt to allow boot over USB
+create a uEnv-nfs.txt file with the following content:
+    console=ttyO0,115200n8
+    ipaddr=192.168.7.2
+    serverip=192.168.7.1
+    absolutepath=/var/lib/tftpboot/
+    rootpath=/srv/nfs/bbb,nolock,wsize=1024,rsize=1024 rootwait rootdelay=5
+    loadtftp=echo Booting from network ...;tftpboot ${loadaddr} ${absolutepath}uImage; tftpboot ${fdtaddr} ${absolutepath}am335x-boneblack.dtb
+    netargs=setenv bootargs console=${console} root=/dev/nfs rw nfsroot=${serverip}:${rootpath} 
+    uenvcmd=setenv autoload no; run loadtftp; run netargs; bootm ${loadaddr} - ${fdtaddr}
+
+# Copy boot related information to BOOT SDCARD partition
+*NOTE: If you also have a ROOTFS partition on sd card, don't worry
+cp MLO u-boot.img /media/lbarros/BOOT
+cp uEnv-nfs.txt /media/lbarros/BOOT/uEnv.txt
+NOTE: /media/lbarros/BOOT is the SDCARD boot partition
+
+sudo mkdir /var/lib/tftpboot
+sudo cp uImage /var/lib/tftpboot
+
+# Copy rootfs to /srv/nfs/bbb
+cd /srv/
+sudo mkdir nfs
+
+cd nfs
+sudo mkdir bbb
+
+sudo cp -r ~/projects/cpqd/interteformetro/docker_pru_dma_workspace/generated_roofs/* .
+
+------------Copying rootfs to SD card-----------------
+Coping an already created roofs
+> For this, we will used the image below as a start point:
+- bone-debian-9.5-iot-armhf-2018-10-07-4gb.img.xz
+
+> Decrompressing kernel image
+unxz bone-debian-9.5-iot-armhf-2018-10-07-4gb.img.xz
+
+> Resultant:
+bone-debian-9.5-iot-armhf-2018-10-07-4gb.img
+
+> Right click, select image/disk mounter
+The image will be monted. To see the mounted location, run: lsblk
+
+> Copy the rootfs mounted to the SD card rootfs partition:
+cd <image rootfs just mounted>
+sudo cp -a * /media/lbarros/rootfs
+
+The entire process will take a while
+
+
+------------Copying Kernel and modules to SD card-----------------
+cd linux_bbb/arch/arm/boot
+cp uImage /media/lbarros/BOOT/
+cd /lib/modules
+sudo cp -a 4.9.36/ /media/lbarros/rootfs/lib/modules/
+/* Removing modules used by other kernel version */
+rm -rf /media/lbarros/rootfs/lib/modules/4.14.71-ti-r80
+
+------------Writing SO to Flash-----------------
+1. Boot beaglebone board with the SD card created
+2. ssh debian@192.198.7.2, pwd: tempped
+3. Run the command:
+sudo /opt/scripts/tools/eMMC/./init-eMMC-flasher-v3.sh
+NOTE: older SO's, like 4.9.x, does not automatically write SD card image to Flash uncommenting the uEnv directive
+4. Leds will start to shift and the screen will show current progress
+5. When all leds stop to shoft, the process is complete
+
+------------NOTES----------------------
+- Vendors default config file location
+linux_bbb/arch/
+- Beaglebone Black default config file location
+linux_bbb/arch/arm/configs/bb.org_defconfig
