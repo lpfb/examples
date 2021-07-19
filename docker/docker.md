@@ -132,3 +132,6 @@ Quando rodamos um container a partir de uma imagem, esse container criar um laye
 - Inspecionando uma rede docker para ver configuracoes e quais containers estao conectados
     - docker inspect <nome da rede>
     - Ex: docker inspect minha-rede
+- Dando attach em um container rodando e abrindo o terminal
+    - docker exec -it  <IMAGGE NAME/ID> /bin/bash
+        - Ex: docker exec -it  segmentationfault_wss3_1 /bin/bash

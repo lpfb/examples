@@ -2,6 +2,29 @@
 ```sh
 du -Sh | sort -rh | head -5
 ```
+# Mounting remote directories over an SSH connection
+SSHFS (SSH Filesystem) is a filesystem client based on FUSE for mounting remote directories over an SSH connection. SSHFS is using the SFTP protocol, which is a subsystem of SSH and it is enabled by default on most SSH servers.
+
+As a result, you will have a mounted partition on the host side.
+
+Reference: [link](https://linuxize.com/post/how-to-use-sshfs-to-mount-remote-directories-over-ssh/)
+
+## Install
+```sh
+sudo apt install sshfs
+```
+## Configuration/Use
+1. Create a folder (server side/host) in order to mount the remote file System
+1. Mount File System
+```sh
+sshfs <user>@<Cliente IP>:<target client folder> <host mount folder>
+```
+    - Exemple:
+```sh
+sshfs linuxize@192.168.121.121:/home/linuxize /home/linuxize/linuxizeremote
+```
+1. Insert password and now you will be able to access te content of maped folder as a mounted partition.
+
 # Managing install librarys (apititude)
 To do this one can use apititude
 
@@ -9,12 +32,13 @@ To do this one can use apititude
 sudo apt install apititude
 
 # C language library configurations
-You can use a '.a' (static) or '.o' file as a library. The file must follow the pattern lib~.so, at the end you can use so.x.y.z, where x, y and z are library versions.
+You can use a **.a** (static) or **.o** file as a library. The file must follow the pattern lib~.so, at the end you can use so.x.y.z, where x, y and z are library versions.
 
 ## Listing Linux library paths
 ```sh
 ldconfig -v
 ```
+
 ## Main library paths
 - /usr/lib
 - /usr/lib/x86_64-linux-gnu
@@ -141,7 +165,7 @@ EOF
 1. Coping file 7z.sfx or 7zCon.sfx from a windows machine with the desired architecture (32 or 64 bits) to your linux machine
     - Usually this files are at *C:\Program Files\7-Zip* folder 
     - 7z.sfx: GUI version. When any action from user is necessary, a GUI will open.
-    - 7zCon.sfx: command line version. When any action from user is necessary, a dos will open.
+    - 7zCon.sfx: command line version. When any action from user is necessary, a dos prompt will open.
 1. Rename file and move to /usr/lib/p7zip/
     - Renaming suggestions 7z.sfx to 7zWin<32 or 64>.sfx
     - Renaming suggestions 7zCon.sfx to 7zConWin<32 or 64>.sfx
@@ -227,7 +251,7 @@ mktemp -d tmp.XXX
 - Obs2: Se o nome do arquivo for omitido, o sistema vai escolher automaticamente
 
 ## Arquivo
-Cria um arquivo temporário e informa em STD out o nome do arquivo criado. É preciso passar pelo menos três letras 'X' maísculas depois do ponto após o nome do arquivo, esses 'x' serão usados para gerar um 'ID' pseudo-aleatório para evitar problemas de conflito de nome.
+Cria um arquivo temporário e informa em STD out o nome do arquivo criado. É preciso passar pelo menos três letras 'X' maísculas depois do ponto após o nome do arquivo, esses 'X' serão usados para gerar um 'ID' pseudo-aleatório para evitar problemas de conflito de nome.
 ```sh
 mktemp tmp.XXX
 ```
@@ -243,4 +267,39 @@ gsettings set org.gnome.shell.extensions.dash-to-dock isolate-workspaces true
 ```sh
 sudo adduser tc.lbarros --force-badname #Devido ao ponto no meio do nome eh preciso usar o force-badname
 sudo usermod -aG sudo tc.lbarros #Adiciona o usuario ao gruipo root
+```
+# Controlando as configurações de som do PC
+O app PulsAudioControl ajuda a controlar as entradas e saídas de som do PC e ter um controle melhor do nivel de som de cada aplicação.
+Obs: O Spotify não estava reproduzindo som uma vez e só com este app foi possível checar que ele estava mutado e desmuta-lo.
+
+## Instalação
+```sh
+sudo apt install pavucontrol
+```
+## Uso
+Basta digitar o comando abaixo que uma GUI será aberta. Também é possível achar o Pulse Audio na seção de app's linux.
+```sh
+pavucontrol
+```
+# Compactando arquivos TAR.GZ
+Commando para compactar
+```sh
+tar -czf <nome_a_ser_gerado>.tar.gz <arquivo_ou_pasta_alvo>/
+```
+Comando para descompactar
+```sh
+tar -xzf <nome_arquivo>.tar.gz
+```
+
+# Monitoring network traffic
+## Using iftop
+
+### Instalando
+```sh
+sudo apt install iftop
+```
+
+### Filtrando por interface e mostrando as portas
+```sh
+sudo iftop -P -i eth0
 ```

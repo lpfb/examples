@@ -57,6 +57,12 @@ docker run -it --name ubuntu-dois --network minha-rede ubuntu
 # Ex:
 docker inspect ubuntu-um
 ```
+1. Tambem eh possivel inspecionar quem esta conectado em uma rede docker com o comando
+```sh
+# docker inspect <nome da rede>
+# Ex:
+docker inspect minha-rede
+```
 1. Efetuando o ping do container ubuntu-um dentro do container ubuntu-dois
 ```sh
 apt-get update && apt-get install -y iputils-ping
