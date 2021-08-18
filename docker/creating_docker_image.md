@@ -14,12 +14,12 @@ Usado para informar que eh o mantenedor/criador do dokcer:
 Se for preciso copiar algo do PC host para dentro do docker durante a criaçao do mesmo, eh atraves deste comando que isso deve ser feito:
 - COPY <Caminho arquivo pc HOST> <Pasta de destino docker>
     - Ex: COPY . /var/www, copia tudo da pasta atual e salva no container em /var/www
-    
+
 ## RUN
 Usado para rodar comandos dentro do docker, usado tipicamente para instalar dependencias:
 - RUN <Comando de instalacao>
     - Ex: RUN apt install python3
-    
+
 ## ENTRYPOINT
 Utilizado para rodar um comando assim que o container eh iniciado, pode ser um script, uma aplicacao e etc:
 - ENTRYPOINT "SCRIPT ou COMANDO"
