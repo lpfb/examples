@@ -1,0 +1,5 @@
+# Compiling DTS
+dtc -@ -O dtb -o <generated dtb>.dtb <target dts>.dts
+
+# Dumping a compiled DTBO
+dtc -O dts -o <desired result dts>.dts <target dtbo>.dtbo
