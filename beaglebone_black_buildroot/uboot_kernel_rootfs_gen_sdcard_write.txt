@@ -1,0 +1,154 @@
+=====================================================
+                Download and setup
+=====================================================
+# Downloading buildroot
+wget -P <desired download dir> https://buildroot.org/downloads/buildroot-2021.08-rc2.tar.gz
+Extract it
+
+# Pacage requirements
+ - Build tools:
+    which
+    sed
+    make (version 3.81 or any later)
+    binutils
+    build-essential (only for Debian based systems)
+    gcc (version 4.8 or any later)
+    g++ (version 4.8 or any later)
+    bash
+    patch
+    gzip
+    bzip2
+    perl (version 5.8.7 or any later)
+    tar
+    cpio
+    unzip
+    rsync
+    file (must be in /usr/bin/file)
+    bc 
+- Source fetching tools:
+    wget 
+
+=====================================================
+            Buildroot configurations
+=====================================================
+cd <buildroot dir>
+
+# Apply beaglebone default configuration
+make beaglebone_defconfig
+
+# Open configuration interface
+make menuconfig
+
+# Navigate through menus to configure linux
+Kernel
+    [] Linux Kernel
+        - select it
+    Kernel version
+        Custom Git repository
+    () URL of custom repository
+        https://github.com/beagleboard/linux.git
+    () Custom repository version (NEW)
+        4.9.32-ti-r41
+    () Defconfig name (NEW)
+        bb.org
+    Kernel binary format ()
+        zImage
+    Build a Device Tree Blob (DTB)
+        - selecionar
+    In-Tree Device Tree Source file names
+        am335x-boneblack
+    Install Kernel image to /boot in target (NEW)
+        - TALVEZ USAR ISSO
+    EXIT
+
+Bootloaders
+    U-Boot
+        U-boot Version (2017.03)
+    Board defconfig
+        am335x_boneblack_vboot
+    U-Boot needs DTC
+        select
+    U-boot binary format --->
+        [] u-boot.img
+            Select
+    Install U-boot SPL binary image
+    U-Boot SPL/TPL binary image name(s)
+        MLO
+    EXIT
+
+Toolchain
+    /Toolchaon type
+        - select "External toolchain"
+    / Toolchain origin
+        /() Toolchain to be downloaded and installed
+            - install it                
+    EXIT
+
+System configuration
+    /(buildroot) System hostname
+        - informed desired name
+    /(Welcome to Buildroot) System banner
+        - change to: "Welcome to BeagleDAQ"
+    /() Root password
+        - inserir a senha desejada
+        - Ex: root
+    /Run a getty (loginc prompt) after boot
+        /TTY port
+            ttyS0
+        /Baudrate (keep kernel deafult)
+            - 115200
+    EXIT
+
+# (Optional) Add new user
+System configuration
+    /() Path to users tables
+        - Add full path to user configuration file (the syntax will be described in the next section)
+        * Obs: extension does not matter
+
+Save configuration
+
+=====================================================
+            Optional post configurations
+=====================================================
+# Add depmode support (just for driver development purpose)
+This command enable us to update driver dependencies
+
+nvim package/busybox/busybox.config
+    change line 546: 
+    from: # CONFIG_DEPMOD is not set
+    to: CONFIG_DEPMOD=y
+
+# Add new user
+After configuring "Path to users tables" in make menuconfig step, create a file with user configuration below in the path informed
+    # Parameters:
+    # username uid group gid password home shell groups comment
+        alfa -1 users -1 !=alfa /home/alfa /bin/sh - Alfa sens user
+
+=====================================================
+                    Compilation
+=====================================================
+# Compile linux using until 8 cores
+make -j8
+
+=====================================================
+                    WORKARROUNDS
+=====================================================
+# If the error below apper:
+> ERROR: file(am335x-evm.dtb): stat(/home/lbarros/projects/cpqd/interteformetro/tests/buildroot/buildroot-2021.08-rc2/output/images/am335x-evm.dtb) failed: No such file or directory
+> Edit "board/beaglebone/genimage.cfg" and let just this dtb file: am335x-boneblack.dtb
+
+# If the error "multiple definition of yylloc error" appear, you should edit the file "dtc-lexer.lex.c_shipped":
+Change "YYLTYPE yylloc" to "extern YYLTYPE yylloc"
+
+=====================================================
+                   Output files
+=====================================================
+> Artifact paths: <buildroot dir>/output/images
+> Artifacts: am335x-boneblack.dtb  boot.vfat  MLO  rootfs.ext2  rootfs.ext4  rootfs.tar  sdcard.img  u-boot.img  uEnv.txt  zImage
+
+=====================================================
+           Writing sdcard.img into SDCARD
+=====================================================
+# Find the correct SDCARD name using lsblk, mmcblk0 will be used as an example
+cd <buildroot dir>/output/images
+sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 bs=4M conv=sync status=progress
