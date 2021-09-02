@@ -152,3 +152,28 @@ Change "YYLTYPE yylloc" to "extern YYLTYPE yylloc"
 # Find the correct SDCARD name using lsblk, mmcblk0 will be used as an example
 cd <buildroot dir>/output/images
 sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 bs=4M conv=sync status=progress
+
+=====================================================
+             First steps after boot
+=====================================================
+# Accessing board
+Ethernet will not be available at this point. So in order to access board terminal, you should use Uart (J1 header). To access this terminal you should use an FTDI cable and use minicom, or something similar.
+
+sudo minicom -b 115200 -D /dev/ttyUSB0 -8 --color=on
+
+User: root
+Password: root
+
+# Adding support to Ethernet interface
+After access the board:
+1. vi /etc/network/interfaces
+2. Add the following lines:
+	auto lo
+	iface lo inet loopback
+
+	auto eth0
+	iface eth0 inet dhcp
+3. Connect Ethernet cable and reboot board
+4. Now Ethernet will be available
+	- SSH Won't be available. There is some work to do in order to enable this
+	- Although SSH is not available, you can use socket to transfer data to/from PC
