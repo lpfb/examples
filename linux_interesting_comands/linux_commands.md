@@ -109,12 +109,32 @@ sudo journalctl --vacuum-time=1s
 # Creating linux socat
 This can be used to forward TCP communication from one pc/board to another one.
 ```sh
-sudo socat TCP-LISTEN:<host port>,fork TCP:<target ip>:<target port>
+sudo socat TCP4-LISTEN:<host port>,fork TCP:<target ip>:<target port>
 ```
 Where:
 - host port: it is the port of the host that you will desire to open to foward the comunication to the target
 - targe ip: IP of the target board/pc
 - target port: Port of the target pc/board. Note: port 22 must be used in case of ssh communication.
+
+Testing socat redirection
+```sh
+ssh <user>@<host ip> -p <host port>
+```
+Where:
+- host ip: Host ip who foward the below port
+- host port: it is the port of the host fowarded using previous command
+
+NOTE: When the socat is closed by the other part, socat close conection and needs to be reopen. To resolve this:
+```sh
+#!/bin/bash
+
+while :; do
+    echo "Reopenning socat"
+    socat TCP4-LISTEN:12345,fork TCP:192.168.7.2:22
+    echo "Socat closed"
+    sleep 1
+done
+```
 
 # Grep
 Opções interessantes do grep:
@@ -302,4 +322,8 @@ sudo apt install iftop
 ### Filtrando por interface e mostrando as portas
 ```sh
 sudo iftop -P -i eth0
+```
+# Changing hostname
+```sh
+sudo vim /etc/hostname
 ```

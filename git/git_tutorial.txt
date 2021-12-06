@@ -97,6 +97,9 @@
         $ git log --graph --all --decorate --oneline
         $ git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all --decorate
 
+# Getting current tag version or commit hash (if there is no tag yet)
+If you want a "describe" to fall back to an abbreviated hash if it can't find any suitable tags, you can use --always.
+    $ git describe --always
 
 
 # Git Diff
