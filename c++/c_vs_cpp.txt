@@ -1,0 +1,10 @@
+c: static : privado soh visivel para o arquivo
+c++: namespace pode ser usado para resolver isso
+c++ (overload): premite termos duas funções com o mesmo nome porém que recebem argumentos de tipos diferentes no mesmo arquivo, o compilador vai saber qual chamar pelo argumento, ex:
+int teste(int a, int b); << usada quando os dois parâmetros são int
+int teste(char a, int b); << usada quando o primeiro parâmetro é char e o segundo é int
+c++: Encapsulamento
+    public (menor segurança): acessível para os usuários da classe
+    protected (segurança mediana): não é visível para os usuários da classe mas pode ser acessado por classes que herdem essa classe
+    pivate (máxima segurança): não é visível para os usuários e também para quem herda a classe
+    
