@@ -4,6 +4,8 @@
 int main() {
 	std::vector<int> id = {10, 20 , 30};
 
+    int teste = id.at(0);
+
 	// Using auto, similar to python for
 	for (auto i : id) {
 		std::cout << "Auto, value of id = " << std::to_string(i) << std::endl;

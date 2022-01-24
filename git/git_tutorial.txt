@@ -19,6 +19,41 @@
         - .git Directory: After the commit, the files goes to the local “.git” repository
 
 ========================================================
+                  Basic Work flow
+========================================================
+# Working with local branch and partial commits
+    > This is a good practice because one can register the corrent work in a separe environment so that you
+    can work in many features at the same time, perform partial commits to register progress and than merge
+    all necessary commits in one, so that you remove commits that inserted errors, an push to remote repo
+
+    1- Create a local branch based on the desired branch base (Ex: master)
+        $ git checkout <desired branch/commit base>
+        $ git branch <desired name>
+        $ git checkout <desired name>
+    2- Perform the desired modifications
+    3- Commit each meaningful modification in a separeted commit
+        - If you have new files, execute:
+            $ git add <files>
+        - Add all tackled file modifications
+            $ git add -u
+        - Create a commit
+            $ git commit
+    4- If yoy have more modifications, execute step 3 until you perform al desired modifications
+    5- Now you have several local commits and you want to perform a merge and create just one to push
+        $ git rebase --interactive <commit ID of the commit just prior to the set of commits you want to squash into one>
+    6- In the next window that will appear
+        $ Change all the pick to squash (or s) except the first one
+    7- Save and exit the editor
+    8- Then another text editor will open to let you combine the commit messages from all of the commits into one big commit message.
+        - Format and modify what you want
+    9- To see all modifications that will be commited
+        - This will compare current commit (HEAD) with the it's previous one
+        $ git diff HEAD^ HEAD
+    9- Push modifications to review on remote repo
+        $ git push origin HEAD:refs/for/<remote branch name>
+
+
+========================================================
                     Commands
 ========================================================
 # Cloning a remote repository
@@ -91,11 +126,10 @@
 # Showing commit logs
     > Seing log of a specific commit
         $ git log <commit hash>
-    > Seing commit log's in one line
+    > Seing all commit log's in one line
         $ git log --oneline --decorate
-    > Seing commit log's and branch's as a graph on terminal
-        $ git log --graph --all --decorate --oneline
-        $ git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --all --decorate
+    > Seing all commit log's and branch's as a graph on terminal
+        $ git log --all --graph --decorate --oneline --abbrev-commit
 
 # Getting current tag version or commit hash (if there is no tag yet)
 If you want a "describe" to fall back to an abbreviated hash if it can't find any suitable tags, you can use --always.
@@ -141,7 +175,7 @@ If you want a "describe" to fall back to an abbreviated hash if it can't find an
         4- Paste it into the terminal
         After all this steps, you will be able to merge, rebase, send another patch set and etc and a new local branch will be created
 
-    > Synchronizing a local branch to the last version pointed in the remote repository without apply the modifications
+    > Synchronizing a local branch to the last version pointed in the remote repository without apply the modifications to local branch
         $ git fetch
     > Synchronizing a local branch with its correspondent remote
         $ git pull
@@ -159,7 +193,7 @@ If you want a "describe" to fall back to an abbreviated hash if it can't find an
         $ git checkout <branch name>
         $ git merge <branch-name to be merged>
 
-    > Solving merge conflicts
+    > Solving merge conflicts using an external tool
         $ git mergetool
 
     > Renaming a local branch

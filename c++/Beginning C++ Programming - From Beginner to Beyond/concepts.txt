@@ -1,0 +1,1010 @@
+Compiler: Translates from high-level to low-level (machine language). As a a ressult, compiled source codes will generate .o files
+Linker: Links together our code with others librarys in order to create a executable code.
+
+lhs - Left hand side
+rhs - Right hand side
+
+All necessary tools:
+- sudo apt get install build-essential
+    - gcc, g++, llibrarys, make, and so on
+- Installing codelite
+    - sudo apt-key adv --fetch-keys http://repos.codelite.org/CodeLite.asc
+    - sudo apt-add-repository 'deb https://repos.codelite.org/ubuntu2/ bionic universe'
+
+Commando line compilation:
+    - g++ -Wall -std=c++14 <source name>.ccp -o <desired executable name>
+
+-----------------------------General concepts----------------------------------
+l-value
+    - values that have names and are addressable
+    - modifiable if they are not constants
+    - examples of l-values:
+        int x {100}; // x is an l-value
+        string name; // name is an l-value
+    - examples of non l-values (will cause compilation errors: is not an assigned l-value):
+        100 = x; // 100 is NOT an l-value, it cannot be addressed because it is a literal
+        "Frank" = name; // "Frank" is NOT an l-value, it cannot be addressed because it is a literal
+
+
+r-value (non-addressable and non-assignable)
+    - A value that's not an l-value
+        - on the right-hand side of an assignment expression
+        - a literal
+        - a temporary which is intenteded to be nin-modifiable
+    - examples of r-values:
+        int x {100}; // 100 is an r-vale
+        int y = x + 100; // (x+100) is an r-value
+        string name {"Frank"}; // Frank is an r-value
+        int max_num = max(20,30); // max(20,30) is an r-value
+
+- Some compile errors:
+    int square(int &n) {
+        return n*n;
+    }
+
+    int num {10};
+
+    square(num); // OK
+
+    square(5); // Error - can't reference r-value 5
+
+- Procedural programming
+    - Focus is on processes or actions that a program takes
+    - programs are typically a collaction of functions
+    - data is passed as arguments into functions
+    - limitations:
+        - Functions need to know the structure of the data
+            - If the structure of the data changes many functions must be changed
+        - as programs get larger they become more:
+            - Difficult to understand
+            - Dificul to mantain, debug, extend, debug, recuse code, etc
+
+- Object-Oriented Programming
+    - Classes and objects
+        - focus is on classes that model real-world domain entities
+        - allows developers to think at a higher level of abstraction
+    - information-hiding
+    - encapsulation
+
+    - Classes
+        - Has attributes (data)
+        - has methods (functions)
+        - Can hide data and methods
+        - Provides a public interface
+    - Objects
+        - Created from classes
+        - represents a specific instance of a class
+        - can create many, many objects
+        - each has its own identity
+
+-------------------------------Programing--------------------------------------
+#namespaces: this is a kind of container to avoid name conflicts between librarys.
+Ex: cout is part of std library and is involked as: std::cout, but i can create my own verion in a library called luis and call luis::cout to use it instead of std::cout
+Syntax:
+    <library>::<function/method name>
+- :: is a scope resolution
+- Ex:
+    std::cout
+
+NameSpace directive: using namespace std
+- This will use the entire namespace of std and from now on you does not need to use std::
+Ex:
+    using namespace std;
+    cout << "Test" << endl;
+
+Qualified using namespace
+- To avoid use the entire namespace of a library using "namespace std", we can use only what wee need:
+Ex:
+    using std::cout;
+    using std::endl;
+
+#Variable initilization (c++)
+- It is a good practive to always initialize a variable before use it
+int age = 21;
+int age (21);
+****int age {21}; // c++11 initialization syntax. The benefit of this is that if a value woould not fit in a variable, compiler will generate an error
+
+long people_on_earth {7'600'000'000}; // c++14 style that helps readability
+
+#Checking variable Size and precision
+Example:
+    #include <climits> // used for integers and etc
+    #include <cfloat> // used for floating variables
+    sizeof(int);
+    sizeof(float);
+
+It is possible to use sizeof() with variable names instead of variable type
+ex:
+    int age {52};
+
+    cout << sizeof(age) << endl;
+
+#Constants
+- Integer liral constants
+    > 12 - integer
+    > 12U - unsigned integer
+    > 12L - a long integer
+    > 12LL - a long long integer
+- Floating-point numbers
+    > 12.1 - a double
+    > 12.1F - a float
+    > 12.1L - a long double
+
+- Constat declaration
+    cosnt int mounths_in_year {12};
+
+    DON'T USE DEFINED CONSTANTS IN MODERN C++
+    References: https://www.includehelp.com/cpp-tutorial/difference-between-const-and-define.aspx and https://www.udemy.com/course/beginning-c-plus-plus-programming/learn/lecture/9535370#overview
+    - Macros (#define) can be redefined but const cannot (it will produce an error if you try)
+    	#undef X
+        #define X 300
+    -  #define is not scope controlled whereas const is scope controlled
+        - The preprocessor will perform a blind substitution, i.e., if a define with the same name is used in another file it could be a mess, because it can be hard to determine wich file is using wich value.
+
+#Arrays
+- fixed size
+- all elements of a array must have the same type
+- No checking to see if you are out of bounds
+    > Can cause errors/crashs during execution
+- Always initialize arrays
+- Array declarations:
+    int test_scores [5];
+
+    const int days_in_year {365};
+    int hi_temperatures [days_in_year];
+- it is a good practice to initialize arrays at declaration
+    1. int test_scores [5] {100,95,99,87,88}; // All elements initialized
+
+    2. int test_scores [5] {100,95}; // init the two first elements with 100 and 95, respectively, and the rest with zero
+
+    3. int test_scores [5] {100}; // init the first element with 100 and the rest with zero
+
+    4. int test_scores [5] {0}; // init all elements with zero
+
+    5. int test_scores [5] {}; // init all elements with zero
+
+    6. int test_scores [] {1,2,3,4,5}; // size automaticaly calculated and elements initialized
+- Multimdimensional arrays initialization
+    int test [3][4]
+    {
+        {0, 4, 3, 5},
+        {2, 8, 7, 6},
+        {1, 0, 9, 9},
+    };
+
+#Vectors
+- Container in the C++ Standard Template Library (STL)
+- Dynamic size: can grown and shrink in size at execution time
+- Elements are initialized to zero unless some value are passed at construction time
+- Iteration (looping) is often used to process
+- Very efficient
+- Can provide bounds checking
+    If you try to access an item out of vector broundries, an exception will be thrown at execution time
+- Can use funstions like sort, rever, find and more
+- Vectors are objects
+- Vactors can be declared as a copy of an array or of another vector
+- Vectors can store objects (classes intances)
+Declarations:
+    #include <vector>
+
+    using namespace std;
+
+    vector <char> vowels; // Without
+    vector <int> test_scores;
+- Initilization examples:
+    vector <char> vowels {'a', 'e', 'i', 'o', 'u'};
+    vector <int> test_scores (5); // Pass 5 to construc a 5 element array with all elements initialized with 0
+    vector <int> test_scores {100, 98, 89, 85, 93};
+- Accessing/modifying elements in Array style (no recomended)
+    WARNING: using this method no bounderis check will be done
+    Ex:
+        vector <int> test_scores {100,95,99,87,88};
+        cout << "Fisrt score: " << test_scores[0] << endl;
+        test_scores[0] = 100;
+- Accessing/modifying elements in Vector style (recomended)
+    vector <int> test_scores {100,95,99,87,88};
+    cout << "Fisrt score: " << test_scores.at(0) << endl;
+    test_scores.at(0) = 100;
+- Adding an element into a Vector (growning)
+    For this we can use:
+        vector_name.push_back(element);
+    Ex:
+        vector <int> test_scores {1,2,3}; // Size is 3
+        test_scores.push_back(10); // Now the values are: 1,2,3,10 and the size is 4
+- Getting number of vector itens
+    <vector name>.size()
+- Multidimentional Vector
+    vector <vector<in>> movie_ratings
+    {
+        {1,2,3,4},
+        {0,2,3,4},
+        {9,2,3,4},
+    };
+
+    Accessing an element:
+    movie_ratings.at(1).at(2) will return 3
+- Adding a vector into another vector (copy)
+        vector <int> vector1 {1,2,3};
+        vector <int> vector2 {4,5,6};
+        
+        vector <vector<int>> vector_2d;
+        vector_2d.push_back(vector1);
+        vector_2d.push_back(vector2);
+#Static cast
+- this is prefered than older style cast because compiler will check to see if the variable fit into the desired type
+    - Older (do not use): (type)variable
+    - Newer: static_cast<type>(variable)
+Ex:
+    int x {10};
+    int y {3};
+    double average {0.0};
+
+    average = static_cast<double>(x)/y; // y also will be converted to double type
+
+#Printinf true or false insted of 1 and 0
+cout << std::boolalpha;
+cout << 100 == 100 << endl;
+
+#Operators
+- Compound assignment operators: +=, -=, *=, /=, %=, >>=, <<=, &=, ^=, |=
+Ex: lhs += rhs => lhs = lhs + rhs
+    cost += items * tax => cost + (items * tax)
+
+#Conditional operator (one line if-else)
+    (Expression) ? <Case Expression==true> : <Case Expression==false>
+Es:
+    (i % 10 == 0) ? "10 multilple" : "Not multiple of 10"
+
+#For loop
+Syntax:
+    for (initialization; condition; increment)
+
+- All arguments of for loop are optionals
+    
+It is possible to use comma to use more than one expression:
+Ex:
+    for (int i {1}, j {5}; i <= 5; ++i, ++j)
+        cout << "i: " << i << "j: " << j << endl;
+Infinite loop using for (not recommended, there are better loops types for this)
+    for(;;) {
+        // Infinity loop
+    }
+
+# Range-based for loop
+- Introduced in C++11 standard
+Syntax:
+    for (var_type var_name: sequence)
+        statement; // can use var_name
+
+Ex1: informing var_type
+    int scores [] {100,90,97};
+
+    for(int score : scores)
+        cout << score << endl;
+        
+Ex1: Using auto to deduce variable type
+    int scores [] {100,90,97};
+
+    for(auto score : scores)
+        cout << score << endl;
+
+# Cout floating point precision adjust
+    #include <iomanip>
+    cout << fixed << setprecision(desired value); // Desired value = number of elements after decimal point
+        
+# C Style strings (characters)
+- IMPORTANT: this kind of character arrays must be null terminated otherwise it can output garbage and/or throw an exception error
+- #include <cctype>
+    - Functions for testing caracters
+    - Functions for converting character case (lower to upper ot upper to lower)
+        - tolower(c)
+        - toupper(c)
+    - All methods listed here: https://www.cplusplus.com/reference/cctype/
+- #include <cstring>
+    - Provides the following methods
+        - Copying
+            strcpy(destiny, source)
+        - Concatenation
+            strcat(destiny, source)
+        - Comparison
+            strcmp(str1, str2)
+            - returns 0 if the strings are equal
+        - Searching
+        - Size
+            strlen(str)
+            - The above function returns the size of string in size_t (unsigned) type.
+            - This functions counts the elements until find an null termineted value '\0'
+        - And others
+- #include <cstdlib>
+    - Includes functions to convert C-style Strings to
+        - integer
+        - float
+        - long
+        - etc...
+- limiting the amount of characters that cin read:
+    cin.getline(str, 50); // Will get the maximum of 50 characters
+
+# C++ Strings
+    - #include <string>
+        - std namespace
+        - Sontigous in memory
+        - Dynamic size (char arrays are not)
+        - Supports operators like (+, =, <, <=, >, >=, +=, ==, !=, [] ...)
+            - '+' and '+=' can be used to concatenate strings. It suppoprts concatenation of:
+                - String object + String object
+                - String object + String literal (ex "TESTE" is a string literal)
+                - ERROR: String literal + String literal
+                    Ex: string s1;
+                    s1 = "test " + "123";
+        - Can be easily converted to C-style Strings
+        - This class has a method to get string legth: <string>.length() 
+        - Safer
+Some examples:
+    string s1;
+    s1 = "Test 123";
+
+    string s2 {"Hellor"};
+    s2 = s1; // Now s2 will contains "Test 123"
+
+    // Concatenation
+    string part1 {"C++"};
+    string part2 {"is powerfull"};
+    string sentence; // automaticaly null terminated
+
+    sentence = part1 + " " + part2 // Result in: C++ is powerfull
+
+    // Strings also can hace individual characters just like vectors
+    part1[0] // Which is C
+    part1.at(0) // Which is also C
+
+    // String comparison can be done using ==, !=, <, >
+    string s1 {"Apple"};
+    string s2 {"Banana"};
+    string s3 {s1};
+
+    s1 == s3 // True
+    s1 != s3 // False
+    s1 < s2 // True
+- find() method
+    - Returns the index where the pattern where first found, otherwise it returns string::npos (case pattern not found)
+    ex:
+    string s1 {"This is a test"};
+
+    cout << s1.find("This"); // ret 0
+    cout << s1.find("is"); // ret 2
+    cout << s1.find("is", 4); // ret 5 because the search will start at the 4º position of strinf (offset)
+    cout << s1.find("xx"); // ret string::npos
+- erase()
+    - removes characteres from string
+    ex:
+    string s1 {"This is a test"};
+                0123456789ABCD -> String index in hexa decimal
+
+    cout << s1.erase(0,5); // Ret: is a test. 0: offset, 5: number of elements to remove
+- clear()
+    - Empties the String
+    Ex:
+    string s1 {"This is a test"};
+
+    s1.clear();
+- Using "cin >>" to capture input String
+    - Problem:
+        string s1;
+        cin >> s1; // This will capture characters until an ' ' space be detected
+    - Workaround1 - read until '\n' is found
+        string s1;
+        getline(cin, s1); // Read the entire line until a '\n' is found than stores the string in s1
+    - Workaround2 - Using an alternative to '\n'
+        string s1;
+        getline(cin, s1, 'x'); // Read the entire line until a 'x' is found than stores the string in s1
+- #include <cmath>
+    - sqrt(144) // sqaure root of 144 = 12
+    - pow(2, 3) // 2^3
+
+===== Functions =====
+
+- Function prototypes
+    - it is a good practice to use function prototipes even if you have just one file (main.cpp) because it avoid erros with call sequency, for example, and makes the program more readable
+    - The prototype does not need to have parameters name it needs just the types, but is a good practice to use parameter name
+
+- Using default values
+    double calca_cost(double base_cost, double tax_rate = 0.06);
+        - If this functions is called with just the firts argument, than compiler will use the default value for the next one
+
+- Array as arguments
+    - When you pass an array as an argument to a function, the function will receive the addres of array, so any modification to the function argument will afect the argument passed
+    - When using array it is necessary to pass it's size to the function, otherwise function will not be able to determine array size and can lead to an segmentation fault error
+    ex:
+        void print_array (int intArray [], size_t arraySize);
+    - To avoid modifications of an array inside a function, you can use const as follow:
+        void print_array (const int intArray [], size_t arraySize);
+        - Any attempt to modify the array will cause an compilation error
+
+- Pass arguments by reference (&)
+    - Passing by reference creates an alias to "original" paramter
+    - Using this we can modify the passed argument inside the function and this modification will be applyed in the argument passed when the function was called
+    Ex:
+        void scale_number(int &num) {
+            num = 1000; // Modifying passed argument using alias num
+        }
+        - Any modification inside the function will afect passed argument
+    - If you pass an object as an argument this may cause performance issues, because the entire objet will be copied to be used by the function. So using reference improves speed, below ther is an example using a vector object:
+    Ex:
+        void print(std::vector<int> &v);
+
+        int main() {
+            std::vector<int> data {1,2,3,4,5};
+            print(data);
+        }
+        - If you do not want to be able to modify the vector inside the function, there is a potential problem here. To correct this, use const in function as following:
+        void print(const std::vector<int> &v);
+
+        int main() {
+            std::vector<int> data {1,2,3,4,5};
+            print(data);
+        }
+            - Now you have a good performance and protected vector from modifications
+- Static variables
+    - This kind of variables preserve it's values between function calls and the visibility is restricted by it's scope
+    - Static variables are initialized just in the first execution, other executions will ignore initialization
+    Ex:
+    In this case, number is visible only by static_local function and value of number variable will preserve the value of last call
+
+    void static_local() {
+        static int number {5000}; // Initialized just in the first call
+
+        cout << "Number value is: " << number << endl; // Calls: 1º=5000, 2º=5100, 3º=5200 and so on
+        number += 100;
+        cout << "Number value is: " << number << endl; // Calls: 1º=5100, 2º=5200, 3º=5300 and so on
+    }
+- Inline functions
+    Advantages:
+        - Used to avoid function call overhead
+        - It is faster
+    Desadvantages:
+        - If you inline too much you end up duplication code many times and creating a big binary code
+    - Modern compilers already use this approuch to improve performance in some cases
+    - It is possible to suggest to the compiler to compile a function as inline
+    - inline functions are placed into header files to be used by the entire source code
+    Ex:
+        inline int add_numbers(int a, int b) { // definition
+            return a + b;
+        }
+
+        int main() {
+            int result {0};
+            result = add_numbers(100,200); // calll
+            return 0;
+        }
+
+- References
+    - Behind the scenes, references uses pointers
+    - LOOPS: Using pointers or references in ranged loops improves eficiencym because no copy is made, example with reference:
+        // With copy, less eficient and DOES NOT ALLOW MODIFICATIONS
+        for(auto str: names) // this create a local copy of names
+            str = "teste"; // will not modify names array/vector, just the local copy will be modifyed
+
+        // Using reference: Without copy, More eficient than the previous and ALLOW MODIFICATIONS
+        for(auto &str: names) // Just a reference to the memory
+            str = "teste"; // will modify names array/vector
+
+        // Using reference: Without copy, more eficient and DOES NOT ALLOW MODIFICATIONS
+        for(auto const &str: names) // Just a reference to the memory
+            str = "teste"; // will not modify names array/vector and will cause an compilation error
+
+===== Raw Pointers ("c style pointer") =====
+- It is a good practice to initialize a pointer when you create one, ex:
+    - If you don't initialize a pointer it will point to anywhere and has a potential for problems
+    - int *int_ptr {};
+    - int *int_ptr {nullptr};
+    - string *string_ptr {nullptr};
+    - This way the pointer will point to nowhere, which is addres 0
+- A POINTER WILL ALWAYS HAVE A FIXED SIZE IN THE MACHINE REGARDLESS OF THE VARIABLE THAT IT POINTES TO, SO DOES NOT ASSOCIATE THE SIZE OF A VARIABLE THAT THE POINTER POINTS TO WITH POINTER SIZE.
+- To access (read or write) the value of the variable that the pointer points to it is necessary do deference it. This is done using *, ex:
+    int var {10};
+    int *p = {&var};
+
+    cout << "p deferenced is: " << *p << endl; // will display 10
+    *p = 15;
+    cout << "p deferenced is: " << *p << endl; // will display 14
+    cout << "Var is: " << var << endl; // will display 14
+    
+- Declaration:
+        int *p;
+        cout << "Value of p is: " << p << endl; // Pointer isn't initialized than garbage will be displayed
+        NOTE: the value of a pointer is the addres of the variable that it points to
+        cout << "Addres of p is: " << &p << endl;
+        cout << "size of p is: " << sizeof p << endl; // Will display the size of a pointer in your system, in general it could be 4 or 8 bytes.
+        p = null ptr; // Set pointer to nowhere
+        cout << "Value of p is: " << p << endl; // Will display 0, because now it is pointing to nowhere
+
+- Pointing to a vector and using ranged loop (for loop auto) with a pointer
+    vector<string> names {"Luis", "Paulo", "Fernandes"};
+    vector<string> *names_ptr {nullptr};
+
+    names_ptr = &names;
+
+    cout << "First name: " << (*names_ptr).at(0) <<  endl;
+    // This can be read as:
+    // (*names_ptr).at(0) -> (*names_ptr) returns names vector
+    //  names      .at(0)
+    // First, names_ptr pointer needs to be deferenced "*names_ptr" inside a "()", in order to be executed prior to try to access using .at(), so at this point you have "names" vector, than use .at(0) to get names first value
+
+    // Ranged loop
+    for(auto name: *names_ptr)
+        cout << name << endl;
+
+- Pointing to an array:
+    int int_array[] {50, 60, 200};
+    int *int_array_ptr {int_array}; // Does not need and & because int_array already points to its first item memory address
+
+    /* There are two ways to accesses a array content, both using pointer and an array itself, they are:
+     * Subscript notation:
+     * -> array_name[index]
+     * -> pointer_name[index]
+     * Offset notation:
+     * -> *(array_name+index)
+     * -> *(pointer_name+index)
+     */
+
+    // IMPORTANT: the array, without any index will point to its first element address:
+    cout << "int_array value (no index = address): " << int_array << endl;
+    cout << "int_array_ptr value (sames as above): " << int_array_ptr << endl << endl;
+
+    cout << "Subscript notation: " << endl;
+    cout << "First array element value of pointer " << int_array_ptr[0] << endl; // Accessing first element
+    cout << "First array element address: " << &int_array_ptr[0] << endl;
+    cout << "Secound array element value of pointer: " << int_array_ptr[1] << endl; // Accessing second element
+    cout << "Secound array element address of pointer: " << &int_array_ptr[1] << endl; // The address will be *(int_array_ptr+0) + 4(integer byte size)
+
+    cout << "\nOffset notation: " << endl;
+    cout << "First array element value of pointer " << *int_array_ptr << endl; // Accessing first element
+    cout << "First array element address: " << int_array_ptr << endl;
+    cout << "Secound array element value of pointer: " << *(int_array_ptr+1) << endl; // Accessing second element
+    cout << "Secound array element address of pointer: " << (int_array_ptr+1) << endl; // The address will be *(int_array_ptr+0) + 4(integer byte size)
+
+    - Pointers arith:
+        ptr++ -> points to the next array element
+        ptr-- -> points to the previous array element
+        ptr += n -> increment pointer by "n * sizeof(type)", ex:
+            int array [] {10,20,30};
+            int *ptr {array};
+
+            ptr += 1; // This will point to addres of value 20
+            ptr += 2; // This will point to addres of value 30
+        ptr -= n -> decrement pointer by "n * sizeof(type)", ex:
+            int array [] {10,20,30};
+            int *ptr {array};
+
+            ptr += 2; // This will point to addres of value 30
+            ptr -= 2; // This will point to addres of value 10
+
+- Pointting to Constants
+    - The data pointed to by the pointers is constant and cannot be changed
+    - The pointer itself can change and point somewhere else
+    Ex:
+        int high_score {100};
+        int low_score {100};
+
+        const int *score_ptr {&high_score};
+
+        *score_ptr = 86; // Compilation error
+        *score_ptr = &low_score; // OK
+
+- Constant pointers
+    - The data pointed to by the pointers can be changed
+    - The pointer itself cannot change and point somewhere else
+    Ex:
+        int high_score {100};
+        int low_score {100};
+
+        int *const score_ptr {&high_score};
+
+        *score_ptr = 86; // OK
+        *score_ptr = &low_score; // ERROR
+
+- Constant pointers to constants
+    - The data pointed to by the pointers cannot be changed
+    - The pointer itself cannot change and point somewhere else
+    Ex:
+        int high_score {100};
+        int low_score {100};
+
+        const int *const score_ptr {&high_score};
+
+        *score_ptr = 86; // ERROR
+        *score_ptr = &low_score; // ERROR
+
+- Using Constant pointers to constants to avoid mistakes
+    ex: Supose that we create a function justo to display a vector contet as following:
+
+    void display(vector<string> *v) {
+        for (auto str:*v)
+            cout << str << " ";
+        cout << endl;
+    }
+
+    If we accidentaly do any of following operation inside function:
+        v = nullptr; // change pointer to nowhere
+        (*v).at(0) =  "test"; // Change an vector element
+    It can insert unwanted errros.
+
+    To avoid the above potential erros, its possible to use "Constant pointers to constants"
+    ex:
+    void display(const vector<string> *const v) {
+        for (auto str:*v)
+            cout << str << " ";
+        cout << endl;
+    }
+    Now, any attempt to modify either pointer value or pointer location will result in an compile error
+
+- Returning pointers from functions
+    - Never return a pointer to a local function variable!!!!
+        - After function call, its variables will be removed from stack
+    - You can return a pointer to a dinamicaly data allocated inside a function, because it is created on the HEAP, so it is not removed after function call
+
+- Potential pointers pitfalls
+    - uninitialized pointers
+        int *int_pt; // Pointing anywhere
+        *int_ptr = 100
+        -> There are two potential problems here:
+            1- We can accidentaly access an important system memory area, in this case the problem is a segmentation fault
+            2- (WORST SCENARIO) The code may not fail, because the memery address pointed by the anywhere pointer is not used in some momento, and can fail in a next execution, because now this reagion is beeing used
+    - Dangling pointer
+        - Pointer that is pointing to released memory
+        - pointer that points to memory that is invalid, ex: a returned pointer to a function local variable (described above)
+    - Not checking if new failed (dynamically allocation)
+    - Leaking memory
+        - Forgetting to release allocated memory with delete
+
+-------------------------------Pass-bye value, reference and pointer comparison--------------------------------------
+- Pass-by-value
+    - When the function does not modify the actual paramter
+    - The parameter is small and efficient to copy like simple types (int, char, double and etc)
+- Pass-by-reference using a pointer
+    - When the function does modify the actual parameter
+    - The parameter is expensive to copy
+    - It is ok to the pointer is allowed a nullptrl value
+- Pass-by-reference using a pointer const
+    - When the function does not modify the actual parameter
+    - The parameters is expensive to copy
+    - It is ok to the pointer is allowed a nullptrl value
+- Pass-by-reference using a const pointer ot const
+    - When the function does not modify the actual parameter
+    - The parameters is expensive to copy
+    - It is ok to the pointer is allowed a nullptrl value
+    - You don't want to modify the pointer itself
+- Pass-by-reference using a refence
+    - When the function does modify the actual parameter
+    - The parameters is expensive to copy
+    - The parameter will never be nullptr
+- Pass-by-reference using a const refence
+    - When the function does NOT modify the actual parameter
+    - The parameters is expensive to copy
+    - The parameter will never be nullptr
+
+===== Dynamic memory allocation =====
+- This kind of memory allocation is used to strore data into heap memory of a program
+- To allocate memory "new" is used
+- Allocating and freeing memory for an integer
+    - To allocate memory it is necessary to use "new"
+    - To free the allocate memory it is necessary to use "delete"
+    Ex:
+        int *int_ptr {nullptr};
+        int_ptr = new int; // Allocate an integer on the heap
+        delete int_ptr;   // Frees the allocated integer on the heap
+- The rules to access and modify data allocated are the same as the pointers
+- Allocating an array of intergers:
+    int *array_ptr {nullptr};
+    int size {};
+
+    cout << "How big do you want the array?" << endl;
+    cin >> size;
+
+    array_ptr = new int[size]; // Now we have an array of 10 integers size allocated in memory
+
+    delete [] array_ptr; // It is necessary to use "[]", otherwise just the first array element will be freed
+
+===== Objesct-Oriented Programming =====
+-> Class Member Access Modifiers
+    - public: acessible anywhere
+    - private: acessible only by members or friends of the class
+    - protected: used with inheritance - (next Section)
+    NOTE: If a class is created without any kind of access modifier, the default modifier "privete" will be applyed for all attributes and methods
+
+-> It is a good practice to create private attributes and create public methods to change it's values
+    - This way the method can check if the value is within the valid range before apply it, avoiding wrong behavioral of the program
+    - This makes easy to debug because just one method will be used do change its value rather than everywhere, in case of public members
+    
+
+-> implementing Member Methods
+    - Member methods have access to member attributes, so you don't need to pass them as arguments
+    - Can be implemented inside the class declaration
+        - implicitly inline
+    - Can be implemented outside the class declaration
+        - Need to use Class_name::method_name
+    - Can separate specification from implementation (most used)
+        - .h file for the class declaration
+        - .cpp file for the class implementation
+
+-> When you declare the class in .h header, it is importante to use "INCLUDE GUARDS"
+to gurantee that compiler will process the class just once, no mether how many times the header is included, otherwise if the file .h is included more than once, the compiler will produce an error
+    Ex:
+        # A class named Account must be wrapped in:
+        #ifndef _ACCOUNT_H
+        #define _ACCOUNT_H
+
+            // Class declaration
+
+        #endif
+    - It works in this way: the preprocessor checks if the simbol, in this case _ACCOUNT_H, was declared and, if so, skips until fund #endif. If not defined before, it defines em process the class.
+    - Some compilers also supports "#pragma once" who has the same effect, ex:
+        #pragma once
+            // Class declaration
+
+-> Object Copy: It is possible to copy an intire object to initialize another one:
+    - Lets suppose we have a class called Player:
+    Example:
+        Player hero{"hero",0,0}; // initialization example
+        Player hero2{hero}; // here class we be copied, with its arguments
+    - If you does not provide any copy method, c++ will create and use a dafult one to realize the above operation
+        -> The default behavior will be perform a shallow copy, that is, if you have pointer be caraful, because all objects will share the same memory address so
+        modifyng on region affect others objects and deleting that region also delets all objects memory allocation
+    - Creating a copy method:
+        - Lets supose we have a class called ClassName with a constructor like this:
+            ClassName::ClassName(std:string name_val, int health_val)
+                :name{name_val}, health{health_val} {
+            }
+
+        Copy method that copies all attribute values:
+        void ClassName::ClassName(const ClassName &source)
+            : name(source.name), health(source.health) {
+        }
+
+-> Class example
+    class Player {
+    public: // Everything after this has publioc access
+        // Attributes
+        string name;
+        int health;
+        int xp;
+
+        // methods
+        void talk(string text_to_say);
+        void is_dead();
+    };
+
+-> Class Constructors
+    - If you does not write any onstructor, a default constructor
+    that does nothing and does not expect any argument will be created by the c++ compiler.
+    - It's a good practice to create a constructor to initialize the class attributes to a know value, in case user does not provide one, and
+    does not "use" C++ generated one.
+    - Has the same name as the class and you can use overload
+        - In order to overload the constructor, each one must have an unique signature
+    Ex:
+
+    class Player {
+    private:
+        std:: string name;
+        int health;
+        int xp;
+    public:
+        // Overloaded Constructors
+        Player();
+        Player(std::string name);
+        Player(std::string name, int heath, int xp);
+    };
+    - When the class is instanced, the appropriated constructor will be called
+    according to the passed arguments
+
+    -> Constructor initialization Lists
+        - In the classical Constructor initialization method, parameters are assinged inside the constructor but not initialized, prior to that parameters were "initialized" with garbage.
+        - Constructor initialization Lists resolves the problema above at compile time, so the values od parameters are in fact initialized.
+        Ex:
+        "Classical way"
+        ClassName::ClassName (std::string name_val, int health_val) {
+            name = name_val; // Here we are assigning, the parameters were initialized with garbage first
+            heatlh = health_val;
+
+            // some constructor operations
+        }
+
+        "Better way"
+        ClassName::ClassName (std::string name_val, int health_val)
+           : name{name_val}, heatlh{health_val} {
+            // some constructor operations
+        }
+    - Delegating constructor
+        - To avoid code replication, C++ provides a way to reuse other constructors, but this works just with Constructor initialization Lists
+        Example:
+            - Lest supose that we have a class with 3 constructors:
+           ClassName::ClassName ()
+           ClassName::ClassName (std::string name_val)
+           ClassName::ClassName (std::string name_val, int health_val);
+
+            - It's possible to use:
+            ClassName::ClassName ()
+                : ClassName {"None", 0} {
+                cout << "No-args constructor" << endl;
+            }
+                > This constructor will delegate the initialization to ClassName::ClassName (std::string name_val, int health_val);
+
+             ClassName::ClassName (std:string name_val)
+                : ClassName {name_val, 0} {
+                cout << "One argument constructor" << endl;
+            }
+                > This constructor will delegate the initialization to ClassName::ClassName (std::string name_val, int health_val);
+
+             ClassName::ClassName (std:string name_val, int health_val)
+                : name{name_val}, health{health_val} {
+                cout << "Two arguments constructor" << endl;
+            }
+                > This constructor will use it's own argument initialization
+
+            - If we create an object that is initialized using the ClassName::ClassName () constructor, we will see in the output this massages:
+                Two arguments constructor
+                No-args constructor
+        - Constructor default parameters
+            - It's possible to pass deafult parameters to constructors attributes
+            Example:
+                ClassName::ClassName (std::string name_val = "None", int health_val = 0);
+            - If any of constructor parameters was no provided, it will be substituted by its deafult value
+-> Class Destructors
+    - Special member method
+    - Same name as the class proceeded with a tilde (~)
+    - Invoked automatically when an object is destroyed
+        ex:
+            Player enemy = new Player();
+            delete enemy;
+        - When an object is out of scope, after a function call ends, for example, the
+        destructor is called without the necessity to call delete. This is applyed to
+        objects that are in the Stack
+    - No return type and no parameters
+    - Only 1 destructor is allowed per class (cannot be overloaded)
+    - Useful to release memory and other resources
+    ex:
+        class Player {
+        private:
+            std:: string name;
+            int health;
+            int xp;
+        public:
+            // Overloaded Constructors
+            Player();
+            Player(std::string name);
+            Player(std::string name, int heath, int xp);
+            // Destructor
+            ~Player();
+        };
+
+-> pointer to an Object
+    - Derefence the pointer then use the dot
+    Ex:
+        Account *frank_account = new Account();
+
+        (*frank_account).balance;
+    - Or use the member of pointer operator (arrow operator)
+    This is the most used
+    Ex:
+        Account *frank_account = new Account();
+        
+        frank_account->balance;
+
+-> Operator Overloading
+    -> General formula:
+        Type &Type::<operatorx>(const Type &rhs);
+            Where:
+                Type= object name
+                <operatorx>= can be operator=, operator+, operator- and so on
+            Ex:
+                Overload method: Mystring &Mystring::operator=(const Mystring &rhs);
+
+                Mystring s1, s2;
+
+                s2 = s1 => will be mapped to: s2.operator=(s2);
+
+===== Smart Pointers =====
+Smart pointers tends to be better than using a raw pointers, because
+raw pointers has some potentially serious problems:
+- unintialized pointers (pointing anywhere)
+- Memory leaks (happens offten)
+- Dangling pointers
+- Not exception safe
+
+Smart pointers:
+- Are objects
+- Can be used to point to ny type of Object
+- Can only point to heap-allocated memory
+- Automatically call delete when no longer needed/used
+    - SO YOU DO NOT NEED TO CALL DELETE FOR SMART POINTERS
+- Adhere to RAII principals
+    - you can acces any object method variable as any other kinkd of pointer
+
+To use smart pointers you need to use:
+    - #include <memory>
+
+There are 3 types, desconsidering deprecated auto_ptr, of pointers:
+-> Unique Pointers (unique_ptr)
+    - It is a simple smart pointer - VERY EFFICIENT
+    - this kind of Pointer has just one owner
+        - Cannot be assigned or copied
+        - BUT can be moved
+            ex:
+                std::unique_ptr<int> ptr1 { new int{100} };
+                std::unique_ptr<int> ptr2;
+
+                ptr2 = std::move(ptr1);
+                
+    - When the pointer is destroyed, what it points to is automatically destroyed
+    - "Manually" delets pointed object:
+        Ex: up.reset();  // deletes managed object
+    - Creating, Initializing and using a unique_ptr
+        {
+            std::unique_ptr<int> p1 { new int {100} };
+            std::cout << *p1 << std::endl; // 100
+            *p1 = 200;
+            std::cout << *p1 << std::endl; // 200
+        } // Automatically destroyed
+    - Creating, Initializing a vector of unique_ptr
+        {
+            std::vector<std::unique_ptr<int>> vec;
+            std::unique_ptr<int> ptr { new int{100} };
+            vec.push_back(ptr); // Error - copy nt allowed
+            vec.push_back(std::move(ptr)); // Now ptr was moved to vec and ptr becomes a nullptr
+        } // Automatically destroyed
+    - BETTER WAY TO INITIALIZE pointer with Objects  (More eficient) [C++14]
+        {
+            std::unique_ptr<int> p1 = make_unique<int>(100); // Calls object constructor, pass arguments and than assign to the pointer
+            std::unique_ptr<int> p2 = make_unique<Account>("Curly", 500); // Calls object constructor than assign it to the pointer
+            auto p3 = make_unique<Player>("Hero", 100, 100); // Calls object constructor than assign it to p3 wich will have its type figured out by the compiler
+        } // Automatically destroyed
+    - Using unique_ptr in a vector loop
+        {
+            std::vector<std::unique_ptr<int>> vec;
+            std::unique_ptr<int> ptr1 { new int{100} };
+            std::unique_ptr<int> ptr2 { new int{200} };
+            std::unique_ptr<int> ptr3 { new int{300} };
+
+            //ERROR: for(auto data:vec) // This will cause an error, because in this way a copy is being performed
+            for(const auto &data:vec) // OK -> Using by reference
+                std::cout << *data << std::endl;
+        } // Automatically destroyed
+-> Shared Pointers (shared_ptr)
+    - Provides shared ownership of heap objects, i.e., there can be many shared_ptr's pointing to the same object on the heap
+    - CAN be assigned and copied
+    - CAN be moved
+    - Doesn't support managing arrays by default
+    - When the use count is zero, the managed object on the heap is destroyed
+    - Manually deleting a poited Object
+        Ex: up.reset(); // deletes managed object
+    - Add a bit of overhead because it needs to manage all pointer owners
+    Examples:
+        - Creating, Initializing and using a shared_ptr
+            std::shared_ptr<int> p1 { new int {100} }; // Allocating memory on the heap to an int and assigning it to the pointer
+            std::cout << *p1 << std::endl;
+
+        - Creating a shared_ptr, Getting the number of shared_ptr objects, sharing an object and removing an shared pointer
+            std::shared_ptr<int> p1 { new int {100} }; // Creating
+            std::cout << p1.use_count() << std::endl; // Getting the number of shared instances=1
+            std::shared_ptr<int> p2 { p1 }; // Sharing an object
+            std::cout << p1.use_count() << std::endl; // Getting the number of shared instances=2
+            std::cout << p2.use_count() << std::endl; // Also will display 2, because ptr2 is shared the same object as ptr1
+            p1.reset(); // Decrement the use_count and now p1 is nullptr
+            std::cout << p1.use_count() << std::endl; // Getting the number of shared instances=0 because ptr1 was nulled
+            std::cout << p2.use_count() << std::endl; // Getting the number of shared instances=1
+
+        - BETTER WAY to initialize shared poiters (More eficient) [C++11]
+            // Calls object constructor, pass arguments and than assign to the pointer
+            std::shared_ptr<int> p1 = std::make_shared<int>(100); // use_count: 1
+            std::shared_ptr<int> p2 { p1 }; // use_count: 2
+            std::shared_ptr<int> p3; // p3 is null
+
+            p3 = p1;  // use_count: 3
+
+-> Weak pointers (weak_ptr)
+    - Provides a non-owning "weak" reference
+    - Points to an object on the heap
+    - Does not participate in owning relationship
+    - Always created from a shared_ptr
+    - Does not increment or decrement reference use count
+    - Used to prevent strong reference cyles which could prevent objects from being deleted
