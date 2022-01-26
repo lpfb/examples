@@ -1,0 +1,32 @@
+#> C language rsyslog basic example
+The code below will write the massafe "Test Massage 1" into syslog
+
+#include <syslog.h>
+#include <stdio.h>
+
+int main() {
+    openlog("asteroids",LOG_CONS | LOG_PID | LOG_NDELAY, LOG_USER);
+    syslog(LOG_INFO,"Test Message %d",1);
+    closelog();
+}
+
+#> Adding massage filters
+- It is possible to add filters on rsyslog system so that one can redirect log output to another specific file or even discard some massages
+
+IMPORTANT:
+- All operations below involve modifications in RULES section of /etc/rsyslog.conf
+- After modify rsyslog.conf, you MUST restart rsyslog using below command:
+    $ sudo service rsyslog restart
+
+> Filtering massages from a specific application
+    - Discarding massages from an application
+        - Syntax: :programname, isequal, "appname" ~
+        - Where appname needs to be the target application name, " must be included
+    - Redirecting massages from an application to another log file
+        - Syntax: :programname, isequal, "appname" /var/log/<desired file name>.log
+        - Where appname needs to be renamed to the target application name, " must be included, and <desired file name> must renamed to the desired log file name
+
+> Filtering massages in general
+    - Discarding massages that contains a string pattern
+        - :msg, contains, "test message to discard"    ~
+            - "test message to discard" can be any desired string
