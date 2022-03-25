@@ -1,7 +1,6 @@
 ========================================================
                     Basic concepts
 ========================================================
-
 # Initialize a repository
     > Using this command inside a folder, we will create a local git repository. A folder called ".git" will be placed into the mentioned folder. Removing this ".git" we remove the entire git local repository management.
     $ git init
@@ -21,6 +20,18 @@
 ========================================================
                   Basic Work flow
 ========================================================
+# Working with remote branchs
+    1- Create a remote Branch
+        $ git push --set-upstream origin <branch-name>
+            OR
+        $ git push -u origin <branch-name>
+    2- Modify files
+    3- Commit changes
+        $ git push origin HEAD:refs/for/<branch-name>
+    4- Perform merge into desired branchs
+    5- Delete remote Branch
+        $ git push origin --delete <branch-name>
+
 # Working with local branch and partial commits
     > This is a good practice because one can register the corrent work in a separe environment so that you
     can work in many features at the same time, perform partial commits to register progress and than merge
@@ -51,7 +62,6 @@
         $ git diff HEAD^ HEAD
     9- Push modifications to review on remote repo
         $ git push origin HEAD:refs/for/<remote branch name>
-
 
 ========================================================
                     Commands
@@ -181,6 +191,11 @@ If you want a "describe" to fall back to an abbreviated hash if it can't find an
         $ git pull
     > Synchronizing a local branch before commit with its correspondent remote
         $ git pull --rebase
+
+    > Creating a remote branch
+        $ git push --set-upstream origin <branch-name>
+            OR
+        $ git push -u origin <branch-name>
 
     > Creating a branch from current branch HEAD version
         $ git branch <branch name>

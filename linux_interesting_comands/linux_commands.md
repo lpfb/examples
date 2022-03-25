@@ -180,6 +180,15 @@ sshpass -p <password of remote PC> ssh <remote user>@<remote pc IP> << EOF
 EOF
 ```
 
+## Exchangin ssh keys to password-less login
+- On the PC that you want to use to acess another, run this:
+```sh
+cat ~/.ssh/id_rsa.pub | ssh <user>@<IP board> 'cat >> .ssh/authorized_keys'
+```
+Where:
+- user: board user
+- IP board: board password
+
 # Generating self extractive 7zip file for Windows with password
 
 1. Coping file 7z.sfx or 7zCon.sfx from a windows machine with the desired architecture (32 or 64 bits) to your linux machine
