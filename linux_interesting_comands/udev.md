@@ -1,0 +1,2 @@
+# Introtuction to udev
+uDEV is a device manager for linux, it's considered to be the sucessor of devfsd and hotplug. udev is responsible to inform operational system about new physical devices connections on hardware, based on messages received from kernel. To know more about this, please refer to [Embarcados](https://www.embarcados.com.br/utilizando-o-udev-para-criar-automacoes-com-porta-usb-no-linux/) and [wiki.archlinux](https://wiki.archlinux.org/title/udev).
