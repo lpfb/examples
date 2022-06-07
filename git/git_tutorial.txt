@@ -1,123 +1,182 @@
-========================================================
-                    Basic concepts
-========================================================
-# Initialize a repository
-    > Using this command inside a folder, we will create a local git repository. A folder called ".git" will be placed into the mentioned folder. Removing this ".git" we remove the entire git local repository management.
-    $ git init
+# Basic concepts
 
-# Ignoring files on git
-    1- Creates a file called ".gitignore"
-    2- Put all the file names that you don't want to be versioned into this file
-    > Git recognizes wildcards: Ex: *.py 
-    > You must add one item per line
+## Initialize a repository
+Using this command inside a folder, we will create a local git repository. A folder called ".git" will be placed into the mentioned folder. Removing this ".git" we remove the entire git local repository management.
+```sh
+git init
+```
 
-# Git stages
-    > Git has three different stages, they are:
-        - Working Directory: local repository containing your modified files
-        - Staging Area: When we add a new file to git, this file will be in this area, ready to be committed
-        - .git Directory: After the commit, the files goes to the local “.git” repository
+## Ignoring files on git
+1. Creates a file called ".gitignore"
+1. Put all the file names that you don't want to be versioned into this file
+    - Git recognizes wildcards: Ex: *.py
+    - You must add one item per line
 
-========================================================
-                  Basic Work flow
-========================================================
-# Working with remote branchs
-    1- Create a remote Branch
-        $ git push --set-upstream origin <branch-name>
-            OR
-        $ git push -u origin <branch-name>
-    2- Modify files
-    3- Commit changes
-        $ git push origin HEAD:refs/for/<branch-name>
-    4- Perform merge into desired branchs
-    5- Delete remote Branch
-        $ git push origin --delete <branch-name>
+## Git stages
+Git has three different stages, they are:
 
-# Working with local branch and partial commits
-    > This is a good practice because one can register the corrent work in a separe environment so that you
-    can work in many features at the same time, perform partial commits to register progress and than merge
-    all necessary commits in one, so that you remove commits that inserted errors, an push to remote repo
+- Working Directory: local repository containing your modified files
+- Staging Area: When we add a new file to git, this file will be in this area, ready to be committed
+- .git Directory: After the commit, the files goes to the local “.git” repository
 
-    1- Create a local branch based on the desired branch base (Ex: master)
-        $ git checkout <desired branch/commit base>
-        $ git branch <desired name>
-        $ git checkout <desired name>
-    2- Perform the desired modifications
-    3- Commit each meaningful modification in a separeted commit
-        - If you have new files, execute:
-            $ git add <files>
-        - Add all tackled file modifications
-            $ git add -u
-        - Create a commit
-            $ git commit
-    4- If yoy have more modifications, execute step 3 until you perform al desired modifications
-    5- Now you have several local commits and you want to perform a merge and create just one to push
-        $ git rebase --interactive <commit ID of the commit just prior to the set of commits you want to squash into one>
-    6- In the next window that will appear
-        $ Change all the pick to squash (or s) except the first one
-    7- Save and exit the editor
-    8- Then another text editor will open to let you combine the commit messages from all of the commits into one big commit message.
-        - Format and modify what you want
-    9- To see all modifications that will be commited
-        - This will compare current commit (HEAD) with the it's previous one
-        $ git diff HEAD^ HEAD
-    9- Push modifications to review on remote repo
-        $ git push origin HEAD:refs/for/<remote branch name>
+# Basic Work flow
 
-========================================================
-                    Commands
-========================================================
-# Cloning a remote repository
-    $ git clone <url> <where to clone>
+## Working with remote branchs
+1. Create a remote Branch
+    ```sh
+    git push --set-upstream origin <branch-name>
+    #    OR
+    git push -u origin <branch-name>
+    ```
+1. Modify files
+1. Commit changes and send for revision
+    - Gerrit:
+    ```sh
+    git push origin HEAD:refs/for/<branch-name>
+    ```
+    - Bitbucket
+    ```sh
+    git push origin HEAD:<branch-name>
+        ```
+1. Perform merge into desired branchs
+1. Delete remote Branch
+    ```sh
+    git push origin --delete <branch-name>
+    ```
 
+## Working with local branch and partial commits
+This is a good practice because one can register the corrent work in a separe environment so that you can work in many features at the same time, perform partial commits to register progress and than merge all necessary commits in one, so that you remove commits that inserted errors, an push to remote repo
 
-# Showing the status
-    > There two basic forms to do this:
-        - Show untracked and tracked files of the current branch
-            $ git status
-        - Show just tracked files of the current branch
-            $ git status -uno
+1. Create a local branch based on the desired branch base (Ex: master)
+    ```sh
+    git checkout <desired branch base/commit base>
+    git branch <desired name>
+    git checkout <branch name created>
+    ```
+1. Perform the desired modifications
+1. Commit each meaningful modification in a separeted commit
+    - If you have new files, execute:
+        ```sh
+            git add <files>
+            ```
+    - Add all tackled file modifications
+        ```sh
+            git add -u
+            ```
+    - Create a commit
+        ```sh
+            git commit
+        ```
+1. If yoy have more modifications, execute step 3 until you perform al desired modifications
+1. Now you have several local commits, but you want to perform a merge and create a single push. To do this, run
+    ```sh
+    git rebase --interactive <commit ID of the commit just prior to the set of commits you want to squash into one>
+    ```
+1. In the next window that will appear
+    - Change all the pick to squash (or s) except the first one
+1. Save and exit the editor
+1. Then another text editor will open to let you combine the commit messages from all of the commits into one big commit message.
+    - Format and modify what you want
+1. To see all modifications that will be commited
+    - This will compare current commit (HEAD) with the it's previous one
+    ```sh
+    git diff HEAD^ HEAD
+    ```
+1. Push modifications to review on remote repo
+    - Gerrit:
+    ```sh
+    git push origin HEAD:refs/for/<branch-name>
+    ```
+    - Bitbucket
+    ```sh
+        git push origin HEAD:<branch-name>
+    ```
+
+# Useful Commands
+
+## Cloning a remote repository
+```sh
+git clone <url> <where to clone>
+```
+
+## Showing the status
+There two basic forms to do this
+
+- Show untracked and tracked files of the current branch
+    ```sh
+        git status
+        ```
+- Show just tracked files of the current branch
+    ```sh
+        git status -uno
+        ```
 
 # Showing git configurations
-    $ git config --list
+```sh
+git config --list
+```
 
-# Removing files
-    > Removing a file from the Staging Area
-        $ git checkout <file-name>
-    > Removing all untracked files
-        - This command remove from the disk all files that are not versioned, so beware of it before use this command. The -d option is to remove directories also.
-        $ git clean -fd
+## Removing files
+- Removing a file from the Staging Area
+    ```sh
+    git checkout <file-name>
+    ```
+- Removing all untracked files
+    - This command remove from the disk all files that are not versioned, so beware of it before use this command. The -d option is to remove directories also.
+    ```sh
+    git clean -fd
+    ```
+    - In case of a repository with some directories or even files owned by root, it may be necessary to run this before the command above:
+    ```sh
+    git config --global --add safe.directory <path to the root git repository>
+    ```
 
-# Git Stash
-    > Adding modified files to stash list
-        $ git stash
-    > Applying stashed files into current change and removing it from stash list
-        $ git stash pop
-    > Applying stashed files into current change but does not removing it from stash list
-        $ git stash apply
+## Git Stash
+- Adding modified files to stash list
+    ```sh
+        git stash
+    ```
+- Applying stashed files into current branch and removing it from stash list
+    ```sh
+        git stash pop
+    ```
+- Applying stashed files into current branch but does not removing it from stash list
+    ```sh
+        git stash apply
+    ```
 
-# Adding new files or files that has been changed
-    > Every time that you want to submit a new or a modified file(s) it will be necessary to use this command. After this, the files will be transferred from your working area to your tagring area.
-    > Add all
-        git add -A
-    > Add a single file
-        git add <file name>
-    > Add all files modified and ignore untracked ones
+## Adding modified files or new ones to be committed
+Every time you want to submit a new or a modified file(s) it will be necessary to use this command. After this, the files will be transferred from your working area to your staging area.
+
+- Add a single file
+    ```sh
+        git add <file name or list of files separeted by spaces>
+    ```
+- Add all modified files and ignore untracked ones
+    ```sh
         git add -u
+    ```
 
-# Reverting/Removing a local file changes
-    > Removing add changes from stage area
-        $ git checkout -- <file name>
-    > Unstage files
-        - This command unstage the local commit and files, but does not remove them
-        $ git reset --soft HEAD^
-    > Remove a local commit and go back to the master, remove files
-        $ git reset --hard origin/master 
-            OR
-        $ git reset --hard <COMMIT -ID>
-            * This is the ID given with the command: git log --oneline
+## Reverting/Removing a local file changes
+- Removing a specific file or list of files from staging area
+    ```sh
+        git checkout -- <file name>
+    ```
+- Unstage files
+    - This command unstage the local commit and files, but does not remove them
+    ```sh
+        git reset --soft HEAD^
+    ```sh
+- Remove a local commit and go back to the <branch name> or a specific commit
+    - This processo will remove modified files
+    ```sh
+        git reset --hard origin/master
+        #  OR
+        git reset --hard <COMMIT -ID>
+        ```
 
-# Commiting changes
-    > Committing added changes/files
+## Commiting changes
+- Committing added changes/files
         - Passaing a massage
             $ git commit -m "your message here"
         - Editing the massage on deafult editor
@@ -153,6 +212,12 @@ If you want a "describe" to fall back to an abbreviated hash if it can't find an
         $ git difftool <ver1 ver2>
 
 # Branchs
+    > Removing Merged branchs from local repo
+        git remote prune origin
+            - This will mark merged branchs with gone
+        git branch -d <local branch marked as gone>
+            - This will remove all local references to the merged remote branch
+
     > Reseting local branch to match origing (remote)
         - WARNING: This process will REMOVE ALL local modifications
         $ git fetch origin
@@ -161,7 +226,7 @@ If you want a "describe" to fall back to an abbreviated hash if it can't find an
     > Showing local and remove branchs
         - This command does not search for remote upgrades. To reflect the current state of the remote branchs, run "git pull" before.
             $ git branch -aavvvvvv
-            
+
     > Synchronizing local branch to remote repo branch
         $ git branch --set-upstream-to=origin/<remote branch name>
 
@@ -199,10 +264,18 @@ If you want a "describe" to fall back to an abbreviated hash if it can't find an
 
     > Creating a branch from current branch HEAD version
         $ git branch <branch name>
+
     > Creating a local branch from a specific change of git
         $ git branch <branch name> <commit hash>
+
     > Creating a local branch and synchronizing it with the the remote branch:
         $ git checkout -b <branch name> origin/<remote branch name>
+
+    > Getting just one commit and applying it on current branch
+        $ git cherry-pick <commit HASH>
+
+    > Getting a set of commits and applying it on current branch
+        $ git cherry-pick <commit HASH first desired commit>^..<commit HASH last desired commit>
 
     > Merging branchs
         $ git checkout <branch name>
@@ -254,7 +327,7 @@ If you want a "describe" to fall back to an abbreviated hash if it can't find an
         1- git rebase 18d5ffc e080027
             > 18d5ffc: change to be applyed
             > e080027: change to be rebased with 18d5ffc (git fetch)
-    
+
     > Rebasing a local Synchronized branch with its parent
         0- Inside your local branch
         1- git fecth # this will get latest modifications of remote tracked branch, but not aplly it

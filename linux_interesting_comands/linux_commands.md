@@ -1,3 +1,43 @@
+# Managing Bluetooth connections on terminal
+1. Identify your computer bluetooth
+	```sh
+	hcitool dev
+	```
+	* Outpu example:
+	>Devices:
+	>hci0	E8:D0:FC:C8:2E:54
+
+1. Scan available devices
+	```sh
+	hcitool -i hci0 scan
+	```
+1. Trust the discovered device
+	```sh
+	bluetoothctl
+	```
+	* This will open an terminal with something like this:
+	> [bluetooth]#
+
+	* So trust the device using:
+	> [bluetooth]# trust FC:XX:XX:XX:XX:FE
+
+	* Expected output
+	> [CHG] Device FC:XX:XX:XX:XX:FE Trusted: yes
+
+1. Connect to the device
+	```sh
+	bluetoothctl
+	```
+	* This will open an terminal with something like this:
+	> [bluetooth]#
+
+	* So connect using
+	> [bluetooth]# connect FC:XX:XX:XX:XX:FE
+
+	* Expected output
+	> Attempting to connect to FC:XX:XX:XX:XX:FE
+	> Connection successful
+
 # Listing largest folders/files including the sub-directories
 ```sh
 du -Sh | sort -rh | head -5
@@ -62,7 +102,7 @@ find . -type d \( -path ./node_modules -o -path ./out -o -name ./dist \) -prune 
         - -path ./dir_name: used for the current directory level
         - -name dir_name: used to exclude name in all levels searched
     - -name pattern: used to specify the pattern/file to be searched
-    - '-o' is used as an or expression to add mor dirs 
+    - '-o' is used as an or expression to add mor dirs
 
 - Using find to exclude a directory name from the search
 ```sh
@@ -136,6 +176,10 @@ while :; do
 done
 ```
 
+# Sed + Grep
+grep e trocar substituir as mesmas strings encontradas com sed, substituir string em todos os arquivos:
+procura='XY'; substituicao='UVA'; grep -rl "$procura" . | xargs sed -i "s/$procura/$substituicao/g"
+
 # Grep
 Opções interessantes do grep:
     - -i: ignora se a letra é maiúscula ou minúscula
@@ -192,7 +236,7 @@ Where:
 # Generating self extractive 7zip file for Windows with password
 
 1. Coping file 7z.sfx or 7zCon.sfx from a windows machine with the desired architecture (32 or 64 bits) to your linux machine
-    - Usually this files are at *C:\Program Files\7-Zip* folder 
+    - Usually this files are at *C:\Program Files\7-Zip* folder
     - 7z.sfx: GUI version. When any action from user is necessary, a GUI will open.
     - 7zCon.sfx: command line version. When any action from user is necessary, a dos prompt will open.
 1. Rename file and move to /usr/lib/p7zip/
@@ -217,7 +261,7 @@ xrandr
 xrandr --output HDMI-1 --mode 1920x1080 -r 60
 ```
     - Troque 1920x1080 pela resolução desejada, 60 pelo frame rate desejado e HDMI-1 pela interface de vídeo desejada
- 
+
 # Empty trash in terminal
 ```sh
 rm -rf ~/.local/share/Trash/*
@@ -335,4 +379,25 @@ sudo iftop -P -i eth0
 # Changing hostname
 ```sh
 sudo vim /etc/hostname
+```
+
+# Backgound and foreground process
+## Listing background process
+```sh
+jobs
+```
+
+## Stopping foreground process
+```sh
+CTRL+z
+```
+
+## Starting stopped foreground process number 'n' in background
+```sh
+bg %n
+```
+
+## Bringging background process number 'n' to foreground
+```sh
+fg %n
 ```
