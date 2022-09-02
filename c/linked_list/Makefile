@@ -4,9 +4,9 @@ PROGRAM=test
 SOURCEFILES=main.c int_queue.c
 OBJFILES=$(SOURCEFILES:%.c=%.o)
 
-CFLAG = -Wall -g
+CFLAGS = -Wall -g
 CC = gcc
-INCLUDE =
+INCLUDES =
 LIBS = -lm
 
 all: $(PROGRAM) valgrind
