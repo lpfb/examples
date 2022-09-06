@@ -1,3 +1,7 @@
+# Changing ubuntu repo from regional(br) to main (international)
+sudo sed -i 's|http://br.|http://|g' /etc/apt/sources.list
+https://askubuntu.com/questions/104695/how-do-i-change-mirrors-in-ubuntu-server-from-regional-to-main
+
 # Managing Bluetooth connections on terminal
 1. Identify your computer bluetooth
 	```sh
@@ -73,7 +77,6 @@ sudo apt install apititude
 
 # C language library configurations
 You can use a **.a** (static) or **.o** file as a library. The file must follow the pattern lib~.so, at the end you can use so.x.y.z, where x, y and z are library versions.
-
 ## Listing Linux library paths
 ```sh
 ldconfig -v
@@ -112,6 +115,14 @@ find . -path ./node_modules -prune -false -o -name '*.md'
         - -path ./dir_name: used for the current directory level
         - -name dir_name: used to exclude name in all levels searched
     - -name pattern: used to specify the pattern/file to be searched
+
+# Syslog
+## Clear journal file
+```sh
+sudo su
+> /var/log/syslog
+exit
+```
 
 # Journal
 
@@ -191,7 +202,7 @@ Opções interessantes do grep:
 
 ## Excluindo alguns diretórios da busca e listando apenas os arquivos sem printar conteúdo
 ```sh
- grep -irl --exclude-dir={dir1,dir2,dir3} "TEXTO A SER PROCURADO"
+grep -irl --exclude-dir={dir1,dir2,dir3} "TEXTO A SER PROCURADO"
 ```
 - Onde:
     - -i: ignora se a letra é maiúscula ou minúscula
