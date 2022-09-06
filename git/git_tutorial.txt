@@ -212,7 +212,7 @@ If you want a "describe" to fall back to an abbreviated hash if it can't find an
         $ git difftool <ver1 ver2>
 
 # Branchs
-    > Removing Merged branchs from local repo
+    > Removing remote merged branchs from local repo
         git remote prune origin
             - This will mark merged branchs with gone
         git branch -d <local branch marked as gone>
@@ -257,10 +257,15 @@ If you want a "describe" to fall back to an abbreviated hash if it can't find an
     > Synchronizing a local branch before commit with its correspondent remote
         $ git pull --rebase
 
-    > Creating a remote branch
+    > Creating a remote branch from current commit
         $ git push --set-upstream origin <branch-name>
             OR
         $ git push -u origin <branch-name>
+        
+    > Creating a remote branch from an old commit
+        $ git branch <local branch name> <old commit hash>
+        $ git checkout <local branch name>
+        $ git push --set-upstream origin HEAD:<remote branch-name>
 
     > Creating a branch from current branch HEAD version
         $ git branch <branch name>
