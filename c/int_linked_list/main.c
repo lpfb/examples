@@ -5,49 +5,75 @@
 // Driver Program to test above functions
 int main() {
     struct Queue* q = createQueue();
-
-    printf("Is Empty? %d\n", isEmpty(q));
-    enQueue(q, 10);
-    printf("Added one element\n");
-
-    enQueue(q, 20);
-    printf("Added one element\n");
+    int value = 0;
+    int index = 0;
 
     printf("Is Empty? %d\n", isEmpty(q));
 
+    value = 10;
+    printf("Added %d\n", value);
+    pushQueue(q, value);
     printQueue(q);
-    deQueue(q);
-    printf("Removed one element\n");
 
-    deQueue(q);
-    printf("Removed one element\n");
-
-    printf("Is Empty? %d\n", isEmpty(q));
-
-    enQueue(q, 30);
-    printf("Added one element\n");
-
-    enQueue(q, 40);
-    printf("Added one element\n");
-
-    enQueue(q, 50);
-    printf("Added one element\n");
-
-    printf("Is Empty? %d\n", isEmpty(q));
-
+    value = 20;
+    printf("Added %d\n", value);
+    pushQueue(q, value);
     printQueue(q);
-    deQueue(q);
+
+
+    printf("Is Empty? %d\n", isEmpty(q));
+
+    /* printf("Removed one element\n"); */
+    /* popQueue(q); */
+    /* printQueue(q); */
+    /*  */
+    /* printf("Removed one element\n"); */
+    /* popQueue(q); */
+    /* printQueue(q); */
+    /*  */
+    /* printf("Is Empty? %d\n", isEmpty(q)); */
+
+    value = 30;
+    printf("Added %d\n", value);
+    pushQueue(q, value);
+    printQueue(q);
+
+    value = 5;
+    index = 0;
+    printf("Added %d at index %d\n", value, index);
+    insertQueue(q, index, value);
+    printQueue(q);
+
+    value = 40;
+    printf("Added %d\n", value);
+    pushQueue(q, value);
+    printQueue(q);
+
+    value = 50;
+    printf("Added %d\n", value);
+    pushQueue(q, value);
+    printQueue(q);
+
+    printf("Is Empty? %d\n", isEmpty(q));
+
+    popQueue(q);
     printf("Removed one element\n");
+    printQueue(q);
 
     printf("Queue Front : %d\n", q->front->key);
     printf("Queue Rear : %d\n", q->rear->key);
     printf("Is Empty? %d\n", isEmpty(q));
 
-    deQueue(q); // Removing last queue items to avoid memory leak
+    popQueue(q); // Removing last queue items to avoid memory leak
     printf("Removed one element\n");
-    deQueue(q);
+    printQueue(q);
+    popQueue(q);
     printf("Removed one element\n");
+    printQueue(q);
     printf("Is Empty? %d\n", isEmpty(q));
+    popQueue(q);
+    printf("Removed one element\n");
+    printQueue(q);
 
     free(q); // Free queue to avoid memory leak
     return 0;

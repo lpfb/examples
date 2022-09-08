@@ -21,22 +21,22 @@ struct QNode *createNode(int key) {
     return new_node;
 }
 
-void enQueue(struct Queue *queue, int key) {
+void pushQueue(struct Queue *queue, int key) {
     struct QNode *new_node = createNode(key);
 
-    if(queue->rear == NULL) {
+    if(queue->size == 0) {
         queue->front = new_node;
-        queue->rear = new_node;
+    } else {
+        queue->rear->next = new_node; // update rear to next pointer
     }
 
-    queue->rear->next = new_node; // update rear to next pointer
     queue->rear = new_node; // update rear node to the new one
     queue->size += 1;
 }
 
-void deQueue(struct Queue *queue) {
+void popQueue(struct Queue *queue) {
 
-    if(queue->front == NULL)
+    if(queue->size == 0)
         return;
 
     struct QNode *prev_front = queue->front;
@@ -48,6 +48,38 @@ void deQueue(struct Queue *queue) {
         queue->rear = NULL;
 
     free(prev_front);
+}
+
+void insertQueue(struct Queue *queue, int index, int key) {
+    if(queue->size == 0) {
+        pushQueue(queue, key);
+        return;
+    }
+
+    if(index > queue->size-1) {
+        return;
+    }
+
+    struct QNode *new_node = createNode(key);
+
+    struct QNode *prev_node = queue->front;
+
+    int i = 0;
+    for(struct QNode *n = queue->front; n != NULL; n = n->next) {
+        if(i == index) {
+            new_node->next = n;
+            queue->size += 1;
+
+            if(n == queue->front)
+                queue->front = new_node;
+            else
+                prev_node->next = new_node;
+
+            break;
+        }
+        prev_node = n;
+        i += 1;
+    }
 }
 
 int isEmpty(struct Queue *queue) {
