@@ -1,0 +1,16 @@
+[Unit]
+Description=WWW Interferometer service
+After=interferometer_python.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=root
+WorkingDirectory=/home/alfa/interferometer/src/interferometer/
+ExecStart=/usr/bin/node --expose-gc /home/alfa/interferometer/src/interferometer/www/build/server.js
+ExecStop=-/bin/sh -c 'pkill -f -9 \"node --expose-gc server.js\"'
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,26 @@
+# Adding services to systemd
+Reference: https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units-pt
+
+# Description of a service file
+
+## [Unit]
+- Description: here you can add a text to describe your process
+    - Ex:
+        Description=Python Interferometer service
+- After: used to inform a pre requirement service
+    - Ex: start just after the service specified
+        After=interferometer_python.service
+
+## [Service]
+- Restart: Inform if the service should be restarted or not
+    - Ex: always restart
+        Restart=always
+- RestartSec: configures the time to sleep before restarting a service
+- User: defines which user will execute this process. It can even been root.
+- WorkingDirectory: specify the application base dir, if your sw imports local modules you should use this
+- ExecStart: specify the command that should run on service start
+- ExecStop: specify the command that should run on service stop
+
+# Exemples
+interferometer_python.service
+interferometer_www.service
