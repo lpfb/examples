@@ -1,6 +1,18 @@
 # Adding services to systemd
 Reference: https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units-pt
 
+# Systemctl commands
+## Adding service to be executed at system initialization
+$ sudo systemctl enable <service-name>.service
+
+## Starting a service manually
+$ sudo systemctl start <service-name>
+This command calls ExecStart of the service
+
+## Stopping a service manually
+$ sudo systemctl stop <service-name>
+This command calls ExecStop of the service
+
 # Description of a service file
 
 ## [Unit]
