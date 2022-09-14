@@ -31,7 +31,7 @@ void pushQueue(struct Queue *queue, int key) {
     }
 
     queue->rear = new_node; // update rear node to the new one
-    queue->size += 1;
+    queue->size++;
 }
 
 void popQueue(struct Queue *queue) {
@@ -42,7 +42,7 @@ void popQueue(struct Queue *queue) {
     struct QNode *prev_front = queue->front;
     queue->front = prev_front->next;
 
-    queue->size -= 1;
+    queue->size--;
 
     if(queue->front == NULL)
         queue->rear = NULL;
@@ -50,36 +50,80 @@ void popQueue(struct Queue *queue) {
     free(prev_front);
 }
 
-void insertQueue(struct Queue *queue, int index, int key) {
-    if(queue->size == 0) {
-        pushQueue(queue, key);
-        return;
+struct QNode *traverseList(struct Queue *queue, int index) {
+    int i = 0;
+
+    struct QNode *index_node = queue->front;
+
+    if(index <= 0)
+        return index_node;
+
+    while(i != index) {
+        index_node = index_node->next;
+        i++;
     }
 
-    if(index > queue->size-1) {
+    return index_node;
+}
+
+void insertQueue(struct Queue *queue, int index, int key) {
+    if(queue->size == 0 || index >= queue->size) {
+        pushQueue(queue, key);
         return;
     }
 
     struct QNode *new_node = createNode(key);
 
-    struct QNode *prev_node = queue->front;
+    if(index <= 0) {
+        new_node->next = queue->front;
+        queue->front = new_node;
 
-    int i = 0;
-    for(struct QNode *n = queue->front; n != NULL; n = n->next) {
-        if(i == index) {
-            new_node->next = n;
-            queue->size += 1;
+    } else {
+        struct QNode *leader = traverseList(queue, index-1);
 
-            if(n == queue->front)
-                queue->front = new_node;
-            else
-                prev_node->next = new_node;
-
-            break;
-        }
-        prev_node = n;
-        i += 1;
+        new_node->next = leader->next;
+        leader->next = new_node;
     }
+
+    queue->size++;
+}
+
+void deleteQueue(struct Queue *queue, int index) {
+    if(queue->size == 0) {
+        return;
+    }
+
+    if(index <= 0) {
+        popQueue(queue);
+        return;
+    }
+
+    if(index >= queue->size) {
+        index = queue->size-2;
+    } else {
+        index -= 1;
+    }
+
+    struct QNode *node_to_delete;
+
+    if(queue->size == 1) {
+        node_to_delete = queue->front;
+        queue->front = NULL;
+
+    } else {
+        struct QNode *leader = traverseList(queue, index);
+        node_to_delete = leader->next;
+
+        leader->next = node_to_delete->next;
+
+    }
+
+    free(node_to_delete);
+
+    if(queue->front == NULL)
+        queue->rear = NULL;
+
+    queue->size--;
 }
 
 int isEmpty(struct Queue *queue) {
@@ -90,11 +134,8 @@ int isEmpty(struct Queue *queue) {
 }
 
 void printQueue(struct Queue *queue) {
-    if(queue->front == NULL)
-        return;
-
     for(struct QNode *n = queue->front; n != NULL; n = n->next) {
         printf("%d -> ", n->key);
     }
-    printf("NULL\n");
+    printf("NULL (QSize: %ld)\n", queue->size);
 }

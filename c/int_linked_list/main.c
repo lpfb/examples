@@ -44,6 +44,12 @@ int main() {
     insertQueue(q, index, value);
     printQueue(q);
 
+    value = 200;
+    index = 50;
+    printf("Added %d at index %d\n", value, index);
+    insertQueue(q, index, value);
+    printQueue(q);
+
     value = 40;
     printf("Added %d\n", value);
     pushQueue(q, value);
@@ -64,6 +70,11 @@ int main() {
     printf("Queue Rear : %d\n", q->rear->key);
     printf("Is Empty? %d\n", isEmpty(q));
 
+    index = 5;
+    deleteQueue(q, index);
+    printf("Removed at index %d\n", index);
+    printQueue(q);
+
     popQueue(q); // Removing last queue items to avoid memory leak
     printf("Removed one element\n");
     printQueue(q);
@@ -74,6 +85,29 @@ int main() {
     popQueue(q);
     printf("Removed one element\n");
     printQueue(q);
+
+    index = -1;
+    deleteQueue(q, index);
+    printf("Removed at index %d\n", index);
+    printQueue(q);
+
+    index = 0;
+    deleteQueue(q, index);
+    printf("Removed at index %d\n", index);
+    printQueue(q);
+
+    /* printf("Queue Front : %d\n", q->front->key); */
+    /* printf("Queue Rear : %d\n", q->rear->key); */
+
+    /* index = 1; */
+    /* deleteQueue(q, index); */
+    /* printf("Removed at index %d\n", index); */
+    /* printQueue(q); */
+    /*  */
+    /* index = -1; */
+    /* deleteQueue(q, index); */
+    /* printf("Removed at index %d\n", index); */
+    /* printQueue(q); */
 
     free(q); // Free queue to avoid memory leak
     return 0;
