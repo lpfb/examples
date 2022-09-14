@@ -98,30 +98,25 @@ void deleteQueue(struct Queue *queue, int index) {
         return;
     }
 
-    if(index >= queue->size) {
+    if(index >= queue->size) { // Remove last item
         index = queue->size-2;
     } else {
         index -= 1;
     }
 
     struct QNode *node_to_delete;
+    struct QNode *leader = traverseList(queue, index);
 
-    if(queue->size == 1) {
+    if(leader == queue->front) {
         node_to_delete = queue->front;
         queue->front = NULL;
-
+        queue->rear = NULL;
     } else {
-        struct QNode *leader = traverseList(queue, index);
         node_to_delete = leader->next;
-
         leader->next = node_to_delete->next;
-
     }
 
     free(node_to_delete);
-
-    if(queue->front == NULL)
-        queue->rear = NULL;
 
     queue->size--;
 }
