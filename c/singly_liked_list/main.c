@@ -12,57 +12,57 @@ int main() {
 
     value = 10;
     printf("Added %d\n", value);
-    pushQueue(q, value);
+    append(q, value);
     printQueue(q);
 
     value = 20;
     printf("Added %d\n", value);
-    pushQueue(q, value);
+    append(q, value);
     printQueue(q);
 
 
     printf("Is Empty? %d\n", isEmpty(q));
 
     /* printf("Removed one element\n"); */
-    /* popQueue(q); */
+    /* pop(q); */
     /* printQueue(q); */
     /*  */
     /* printf("Removed one element\n"); */
-    /* popQueue(q); */
+    /* pop(q); */
     /* printQueue(q); */
     /*  */
     /* printf("Is Empty? %d\n", isEmpty(q)); */
 
     value = 30;
     printf("Added %d\n", value);
-    pushQueue(q, value);
+    append(q, value);
     printQueue(q);
 
     value = 5;
     index = 0;
     printf("Added %d at index %d\n", value, index);
-    insertQueue(q, index, value);
+    insertIndex(q, index, value);
     printQueue(q);
 
     value = 200;
     index = 50;
     printf("Added %d at index %d\n", value, index);
-    insertQueue(q, index, value);
+    insertIndex(q, index, value);
     printQueue(q);
 
     value = 40;
     printf("Added %d\n", value);
-    pushQueue(q, value);
+    append(q, value);
     printQueue(q);
 
     value = 50;
     printf("Added %d\n", value);
-    pushQueue(q, value);
+    append(q, value);
     printQueue(q);
 
     printf("Is Empty? %d\n", isEmpty(q));
 
-    popQueue(q);
+    pop(q);
     printf("Removed one element\n");
     printQueue(q);
 
@@ -71,28 +71,28 @@ int main() {
     printf("Is Empty? %d\n", isEmpty(q));
 
     index = 5;
-    deleteQueue(q, index);
+    removeIndex(q, index);
     printf("Removed at index %d\n", index);
     printQueue(q);
 
-    popQueue(q); // Removing last queue items to avoid memory leak
+    pop(q); // Removing last queue items to avoid memory leak
     printf("Removed one element\n");
     printQueue(q);
-    popQueue(q);
+    pop(q);
     printf("Removed one element\n");
     printQueue(q);
     printf("Is Empty? %d\n", isEmpty(q));
-    popQueue(q);
+    pop(q);
     printf("Removed one element\n");
     printQueue(q);
 
     index = -1;
-    deleteQueue(q, index);
+    removeIndex(q, index);
     printf("Removed at index %d\n", index);
     printQueue(q);
 
     index = 0;
-    deleteQueue(q, index);
+    removeIndex(q, index);
     printf("Removed at index %d\n", index);
     printQueue(q);
 
@@ -100,12 +100,12 @@ int main() {
     /* printf("Queue Rear : %d\n", q->rear->key); */
 
     /* index = 1; */
-    /* deleteQueue(q, index); */
+    /* removeIndex(q, index); */
     /* printf("Removed at index %d\n", index); */
     /* printQueue(q); */
     /*  */
     /* index = -1; */
-    /* deleteQueue(q, index); */
+    /* removeIndex(q, index); */
     /* printf("Removed at index %d\n", index); */
     /* printQueue(q); */
 

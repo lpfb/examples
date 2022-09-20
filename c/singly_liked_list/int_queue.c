@@ -21,7 +21,7 @@ struct QNode *createNode(int key) {
     return new_node;
 }
 
-void pushQueue(struct Queue *queue, int key) {
+void append(struct Queue *queue, int key) {
     struct QNode *new_node = createNode(key);
 
     if(queue->size == 0) {
@@ -34,7 +34,7 @@ void pushQueue(struct Queue *queue, int key) {
     queue->size++;
 }
 
-void popQueue(struct Queue *queue) {
+void pop(struct Queue *queue) {
 
     if(queue->size == 0)
         return;
@@ -66,9 +66,9 @@ struct QNode *traverseList(struct Queue *queue, int index) {
     return index_node;
 }
 
-void insertQueue(struct Queue *queue, int index, int key) {
+void insertIndex(struct Queue *queue, int index, int key) {
     if(queue->size == 0 || index >= queue->size) {
-        pushQueue(queue, key);
+        append(queue, key);
         return;
     }
 
@@ -88,13 +88,13 @@ void insertQueue(struct Queue *queue, int index, int key) {
     queue->size++;
 }
 
-void deleteQueue(struct Queue *queue, int index) {
+void removeIndex(struct Queue *queue, int index) {
     if(queue->size == 0) {
         return;
     }
 
     if(index <= 0) {
-        popQueue(queue);
+        pop(queue);
         return;
     }
 

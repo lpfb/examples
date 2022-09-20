@@ -16,9 +16,9 @@ struct Queue *createQueue();
 struct QNode *createNode(int key);
 
 // API start
-void pushQueue(struct Queue *queue, int key);
-void popQueue(struct Queue *queue);
-void insertQueue(struct Queue *queue, int index, int key);
-void deleteQueue(struct Queue *queue, int index);
+void append(struct Queue *queue, int key);
+void pop(struct Queue *queue);
+void insertIndex(struct Queue *queue, int index, int key);
+void removeIndex(struct Queue *queue, int index);
 int isEmpty(struct Queue *queue);
 void printQueue(struct Queue *queue);
