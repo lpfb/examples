@@ -114,11 +114,35 @@ void removeIndex(struct Queue *queue, int index) {
     } else {
         node_to_delete = leader->next;
         leader->next = node_to_delete->next;
+
+        if(node_to_delete == queue->rear)
+            queue->rear = leader;
     }
 
     free(node_to_delete);
 
     queue->size--;
+}
+
+void reverse(struct Queue *queue) {
+    // Reference: https://www.youtube.com/watch?v=XgABnoJLtG4
+    if(queue->size <= 1) {
+        return;
+    }
+
+    struct QNode *prev = NULL;
+    struct QNode *next = NULL;
+
+    queue->rear = queue->front;
+
+    while(queue->front != NULL) {
+        next = queue->front->next;
+        queue->front->next = prev;
+        prev = queue->front;
+        queue->front = next;
+    }
+
+    queue->front = prev;
 }
 
 int isEmpty(struct Queue *queue) {
@@ -132,5 +156,5 @@ void printQueue(struct Queue *queue) {
     for(struct QNode *n = queue->front; n != NULL; n = n->next) {
         printf("%d -> ", n->key);
     }
-    printf("NULL (QSize: %ld)\n", queue->size);
+    printf("NULL\n");
 }

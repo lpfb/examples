@@ -20,5 +20,6 @@ void append(struct Queue *queue, int key);
 void pop(struct Queue *queue);
 void insertIndex(struct Queue *queue, int index, int key);
 void removeIndex(struct Queue *queue, int index);
+void reverse(struct Queue *queue);
 int isEmpty(struct Queue *queue);
 void printQueue(struct Queue *queue);
