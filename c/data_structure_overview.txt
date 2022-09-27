@@ -1,9 +1,45 @@
 Linked list:
-#> Advantages
-    - Fast Insertion
-    - Fast Deletion
-    - Ordered
-    - Flexible Size
-#> Disadvantages
-    - Slow lookup
-    - More Memory
+    > Advantages
+        - Fast Insertion
+        - Fast Deletion
+        - Ordered
+        - Flexible Size
+    > Disadvantages
+        - Slow lookup
+        - More Memory
+
+Hash Tables:
+    > Advantages
+        - Fast lookups
+            *Good collision resolution needed
+        - Fast inserts
+        - Flexible Keys (not just numbers as indexes)
+    > Disadvantages
+        - Unordered
+        - Slow key iteration
+
+Stacks:
+    > LIFO (Last In First Out)
+    > Used in brownser history, undo/redo in editors and so on
+    > Can be created using arrays and linked lists:
+        - Arrays: can take benefit from memomy cash so it can be a little faster than linked lists
+        remove the last item is O(1) in arrays,
+        but as the arrays grows you will need to realocate memory.
+        - Linked lists: uses more memory, dont benefit from cash, but handles better itens gorwnth.
+        - BOTH can be used, the best one will dependes on your needs.
+    > O of n:
+        - lookup O(n)
+        - pop O(1)
+        - push O(1)
+        - peek O(1) - Just View the last item
+
+Queue:
+    > FIFO (First In First Out)
+    > Can be created using arrays and linked lists:
+        - Arrays: worst option as removing the first elemente will cause the entire array to shift.
+        - Linked list: faster than the array implementation and do not suffer from list shift problem.
+    > O of n:
+        - lookup O(n)
+        - pop(dequeue) O(1)
+        - push(enqueue) O(1)
+        - peek O(1) - Just View the first item
