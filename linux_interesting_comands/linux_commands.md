@@ -412,3 +412,8 @@ bg %n
 ```sh
 fg %n
 ```
+
+# Creating a file of a certain size (1GB in this case) using dd
+```sh
+dd if=/dev/zero of=1g.img bs=1 count=0 seek=1G
+```
