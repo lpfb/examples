@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "agnostic_queue.h"
+#include "flexible_queue.h"
 
 struct Queue *createQueue() {
     struct Queue *new_queue = (struct Queue*)malloc(sizeof(struct Queue));

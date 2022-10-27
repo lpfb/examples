@@ -1,7 +1,7 @@
 SHELL = /bin/sh
 
 PROGRAM=test
-SOURCEFILES=main.c agnostic_queue.c
+SOURCEFILES=main.c flexible_queue.c
 OBJFILES=$(SOURCEFILES:%.c=%.o)
 
 CFLAGS = -Wall -g
