@@ -1,0 +1,21 @@
+Instalação e configuração WSL:
+- Referência: https://learn.microsoft.com/pt-br/windows/wsl/install
+- Passo a passo:
+    1- Abrir um powershell com privilégio de adm
+    2- Rodar: wsl --install
+    3- Rodar: wsl --set-default-version 2
+    4- Abrir wsl e rodar os comandos:
+        - sudo apt install linux-tools-virtual hwdata
+        - sudo update-alternatives --install /usr/local/bin/usbip usbip `ls /usr/lib/linux-tools/*/usbip | tail -n1` 20
+    5- Deixar WSL aberto
+
+Instalação e configuração do serviço de USB sharing
+- Referência: https://github.com/dorssel/usbipd-win/wiki/WSL-support
+- Passo a passo:
+    1- Baixar e instalar usbipd-win_2.4.1.msi. Link: https://github.com/dorssel/usbipd-win/releases
+    2- Conectar a USB da placa no PC
+    3- Abrir um powershell com privilégio de adm
+    4- Listar os dispositivos USB: usbipd wsl list
+        - A porta serial da placa vai aparecer identificada como NXP alguma coisa
+    5 - Copiar o BUSID (primeira coluna) do dispositivo NXP
+    6- Conectar a porta ao WSL com o comando: wsl attach -d Ubuntu --busid <busid>

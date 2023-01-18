@@ -1,0 +1,18 @@
+# Checking socket status
+
+> Run this command after start server connection and before start client connection
+netstat -an | grep 65432
+lsof -i | grep 65432
+
+> Comment about .send() vs .sendall()
+	.send(): send one or more bytes. The user must check and send the remanning bytes. This funciont return the number of bytes sent
+	.sendall(): Send all bytes requested. This resolve the abouve problem.
+
+> Comment about .recv()
+	.recv(N): receive N or les bytes. User must handle in case of more data needed
+
+> Sending/receiving byte order (little endian/ Big endian)
+	- socket.ntohl(x)
+	- socket.ntohs(x)
+	- socket.htonl(x)
+	- socket.htons(x)

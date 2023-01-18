@@ -1,0 +1,30 @@
+- Ambiente virtual
+    Referencia: https://docs.python.org/3/library/venv.html
+    pip2.7 install virtualenv
+    pip3 install virtualenv
+
+Criando ambiente virtual:
+    - python3 -m venv </path/to/virtualenv>
+
+Abrindo ambiente virtual:
+    - source </path/to/virtualenv>/bin/activate
+
+Checando se o python em uso está contido no ambiente
+    - which python
+    
+Desativando:
+    - deactivate
+    
+Gerenciamento de dependências:
+    - Dentro do ambiente virtual, executar:
+        - Instalar:
+            - python3 -m pip install requests==2.18.4
+        - Checanco pacotes instalados no ambiente
+            - python3 -m pip freeze
+            - manualament:
+                - ls </path/to/virtualenv>/lib/python3.6/site-packages/
+            - Gerando requisements.txt
+                - python -m pip freeze > requirements.txt
+            - Instalando lista de requisitos
+                - python -m pip install -r requirements.txt
+    

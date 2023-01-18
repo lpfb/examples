@@ -1,0 +1,11 @@
+# Instalação
+```sh
+sudo apt-get install wireshark tshark
+```
+
+# Exemplos de uso
+- Comando: sudo tshark -i <interface> 'tcp port <port number>'
+- Ex:
+```sh
+sudo tshark -i wlan0 'tcp port 80'
+```

@@ -1,0 +1,60 @@
+Repositório de logs: /var/log/
+	- syslog.log: armazena dados globais do sistema, aplicações e etc
+	- auth.log: armazena eventos relacionados a segurança, login, acesso root e etc
+		Ex:
+		> tail -f /var/log/auth.log
+		> sudo su (em um terminal diferente)
+	- kern.log: armazena eventos de kernel, erros, warnings
+	- cron: armazena informações sobre as tarefas agendadas (cron jobs), auxilia debug
+	de atividades do gênero
+	- faillog: armazena as tentativas de login que falharam. Interessante para analisar problemas de segurança.
+
+
+Logs de serviços linux
+	- Referência: https://www.tecmint.com/list-all-running-services-under-systemd-in-linux/
+	- Para tal usa-se o journalctl
+	- Listar todos os serviços:
+		- systemctl --type=service
+	- Listando apenas serviços ativos
+		- systemctl --type=service --state=running
+	- Listando logs de um serviço específico:
+		- journalctl -f -u <service name>.service
+	- Listando logs por time range
+		- journalctl --since "30 min ago"
+		- journalctl --since "1 hour ago"
+		- journalctl --since "2020-06-04 10:42:00" --until "2020-06-07 10:42:00"
+	- Listando logs por time range e serviço
+		- journalctl --since "24 hour ago" -u ssh.service
+
+Dmesg:
+	- Faz o print de todas as mensagens de kernel disponíveis no buffer
+	- Comandos interessantes
+		- dmesg | less
+		- dmesg -e
+			> faz o print em um formato fácil de ler usando data/hora do sistema e delta de tempo
+		- dmesg -e --level=err,warn
+			> Permite filtrar pelo nível do log:
+				- err
+				- warn
+				- segfault
+				- alert
+				- crit
+		- dmesg -w (equivalente ao tail)
+			> Aguarda por novas mensagens
+		- dmesg -xe
+			> deixa o nível da mensagem de log de forma mais explícita informada no terminal
+
+Ferramentas para inspecionar o log:
+	- less <log file>
+		Abre o arquivo desde o início e permite ir navegando aos poucos com as setas
+		"shift+g" mada para o fim do arquivo
+		"q" sai
+	- tail -f <arquivo>
+		- Exibe o fim do arquivo e fica no aguardo de novas informações
+	- more
+		- Preenche o terminal todo com log e permite navegar usando "enter" + "espaço"
+	- cat
+		- joga o conteúdo todo na tela
+
+Arranjos que facilitam:
+	tail -g /var/log/syslog | grep ""
