@@ -17,7 +17,7 @@ int ciclePointer(circ_buf_t *f, int *next_ptr) {
     return next;
 }
 
-int fifoPush(circ_buf_t *f, uint32_t data) {
+int fifoPush(circ_buf_t *f, uint64_t data) {
     int next;
 
     next = ciclePointer(f, &f->head);
@@ -31,7 +31,7 @@ int fifoPush(circ_buf_t *f, uint32_t data) {
     return 0; // Success
 }
 
-int fifoPop(circ_buf_t *f, uint32_t *data) {
+int fifoPop(circ_buf_t *f, uint64_t *data) {
     int next;
 
     if(isFifoEmpty(f))
@@ -54,7 +54,7 @@ int isFifoEmpty(circ_buf_t *f) {
 
 void printFifo(circ_buf_t *f) {
     for(int i = 0; i < f->maxlen; i++) {
-        printf("[%d]:%d", i, f->buffer[i]);
+        printf("[%d]:%ld", i, f->buffer[i]);
 
         if(i != f->maxlen-1)
             printf(" - ");

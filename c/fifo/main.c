@@ -21,11 +21,11 @@ int main() {
 
     debug_print(&fifo_st);
 
-    uint32_t data;
+    uint64_t data;
 
     for(int i = 1; i < 6; i++) {
         data = i;
-        printf("Pushing %d into FIFO\n", data);
+        printf("Pushing %ld into FIFO\n", data);
 
         if(fifoPush(&fifo_st, data))
             printf("ERROR: Out of space");
@@ -38,14 +38,14 @@ int main() {
         if(fifoPop(&fifo_st, &data))
             printf("ERROR: Fifo is empty");
         else
-            printf("Poped %d\n", data);
+            printf("Poped %ld\n", data);
 
         debug_print(&fifo_st);
     }
 
     for(int i = 10; i < 15; i++) {
         data = i;
-        printf("Pushing %d into FIFO\n", data);
+        printf("Pushing %ld into FIFO\n", data);
 
         if(fifoPush(&fifo_st, data))
             printf("ERROR: Out of space");

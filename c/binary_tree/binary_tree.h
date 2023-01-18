@@ -1,4 +1,3 @@
-
 struct tNode {
     int value;
     struct tNode *left;

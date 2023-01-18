@@ -46,6 +46,10 @@ https://askubuntu.com/questions/104695/how-do-i-change-mirrors-in-ubuntu-server-
 ```sh
 du -Sh | sort -rh | head -5
 ```
+# Listing disk usage per folder (Ex: using '/' root dir)
+```sh
+sudo du -h --max-depth=1 /
+```
 # Mounting remote directories over an SSH connection
 SSHFS (SSH Filesystem) is a filesystem client based on FUSE for mounting remote directories over an SSH connection. SSHFS is using the SFTP protocol, which is a subsystem of SSH and it is enabled by default on most SSH servers.
 
@@ -126,6 +130,11 @@ exit
 
 # Journal
 
+## Getting journal of a service since a date
+```sh
+journalctl -u <service name>.service --since "YYYY-MM-DD HH:MM:SS"
+```
+
 ## Changing jornoul configurations
 Some references:
 - [Journal clean-up](https://www.linuxuprising.com/2019/10/how-to-clean-up-systemd-journal-logs.html)
@@ -186,6 +195,11 @@ while :; do
     sleep 1
 done
 ```
+
+# Formatando Pendrive via terminal
+sudo mkfs.vfat /dev/sdc1 - vfat
+sudo mkfs.ntfs /dev/sdc1 - ntfs
+sudo mkfs.ext4 /dev/sdc1 - ext4
 
 # Sed + Grep
 grep e trocar substituir as mesmas strings encontradas com sed, substituir string em todos os arquivos:
@@ -416,4 +430,9 @@ fg %n
 # Creating a file of a certain size (1GB in this case) using dd
 ```sh
 dd if=/dev/zero of=1g.img bs=1 count=0 seek=1G
+```
+
+# Creating a text file with a fixed text and certain size (10G in this example)
+```sh
+yes "Some text" | head -n 1000000000 > large-file
 ```

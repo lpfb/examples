@@ -36,7 +36,7 @@ void insert(struct binaryTree *t, int value) {
                 node->right = newNode;
                 break;
             }
-            node = node->right;
+            node = node->right; // Point to the next right node
 
         } else if (node->value == value) { // Equals
             free(newNode);
@@ -47,11 +47,10 @@ void insert(struct binaryTree *t, int value) {
                 node->left = newNode;
                 break;
             }
-            node = node->left;
+            node = node->left; // Point to the next left node
         }
     }
 }
-
 
 void lookup(struct binaryTree *t, int value) {
     if(!t->root)

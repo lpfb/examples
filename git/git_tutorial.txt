@@ -94,6 +94,11 @@ This is a good practice because one can register the corrent work in a separe en
 
 # Useful Commands
 
+## Creating patchset
+```sh
+git format-patch -1 <commit hash>
+```
+
 ## Cloning a remote repository
 ```sh
 git clone <url> <where to clone>
@@ -215,8 +220,11 @@ If you want a "describe" to fall back to an abbreviated hash if it can't find an
     > Removing remote merged branchs from local repo
         git remote prune origin
             - This will mark merged branchs with gone
-        git branch -d <local branch marked as gone>
-            - This will remove all local references to the merged remote branch
+        Removing pruned branchs automaticaly
+            git branch --merged master | grep -v '^[ *]*master$' | xargs git branch -d
+        Removing pruned branchs manualy
+            git branch -d <local branch marked as gone>
+                - This will remove all local references to the merged remote branch
 
     > Reseting local branch to match origing (remote)
         - WARNING: This process will REMOVE ALL local modifications

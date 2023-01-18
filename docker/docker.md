@@ -1,15 +1,19 @@
 # Instalacao
+Referencia: https://docs.docker.com/engine/install/ubuntu/
 ```sh
-sudo apt-get remove docker docker-engine docker.io
 sudo apt-get update
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
+sudo apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+sudo mkdir -p /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
-sudo apt-get install docker-ce
-# checando se o docker foi instalado
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 sudo docker version
 # para rexecutar o docker sem ser no modo sudo
 sudo usermod -aG docker $(whoami)
@@ -44,6 +48,19 @@ Os magens dos containers sao compostas por varios layers, alguns destes podem se
 Quando rodamos um container a partir de uma imagem, esse container criar um layer adicional que permite a escrita e leitura, um tipo de layer de file system, de forma que cada container tem seu proprio layer de file system, dividindo apenas os layers de imagem (read-only) com os demais containers.
 
 # Comandos importantes
+# Docker disk usage
+docker system df         # Show docker disk usage, including space reclaimable by pruning
+
+# automatic clean up
+docker system prune      # will delete ALL unused data 
+                         # (i.e. In order: containers stopped, volumes without containers and images with no containers)
+# manual clean up
+docker container prune   # Remove all stopped containers
+docker volume prune      # Remove all unused volumes
+docker image prune       # Remove unused images
+docker system prune      # All of the above, in this order: containers, volumes, images
+
+
 - Baixando uma imagem do Docker Hub
     - Os comandos abaixo baixam o container ubuntu, o executam e param (estado de stop)
     - Sem especificar a versao
@@ -74,10 +91,7 @@ Quando rodamos um container a partir de uma imagem, esse container criar um laye
     - Dando stop em todos os catainers ativos
         docker stop -t 0 $(docker ps -q)
 - Dar attach em um container rodando e abrindo o modo iterativo
-    - docker start -a -i <CONTAINER ID>
-    - NOTA: este comando vai executar o container com o ultimo comando enviado, se o ultimo comando for o "/bin/bash", o terminal será aberto, se for "ls", por exemplo, será feito o ls e o terminal se fecha
-    - NOTA2: para saber o ultimo comando executado basta rodar
-        -  docker ps -a 
+    - docker container exec -it <CONTAINER NAME?ID> /bin/bash
 - Rodando imagem no modo iterativo com terminal
 - Este comando vai baixar a imagem, caso a mesma nao esteja instalada, e ira abrir o terminal dentro da mesma
     - docker run -it <IMAGE ID>

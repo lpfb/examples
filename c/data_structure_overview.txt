@@ -1,4 +1,25 @@
+Arrays:
+    > O of n:
+        - lookup O(1)
+        - push O(1)
+        - insert O(n)
+        - delete O(n)
+    > Advantages
+        - Fast Lookups (using desired index)
+        - Fast push/pop (insert and remove items from the end)
+        - Ordered
+    > Disadvantages
+        - Slow inserts
+        - Slow deletes
+        - Fixed size, if static, or memory allocation necessary, when dynamic
+
 Linked list:
+    > O of n:
+        - prepend O(1)
+        - append O(1)
+        - lookup O(n)
+        - insert O(n)
+        - delete O(n)
     > Advantages
         - Fast Insertion
         - Fast Deletion
@@ -9,6 +30,11 @@ Linked list:
         - More Memory
 
 Hash Tables:
+    > O of n:
+        - lookup O(1)
+        - space O(n)
+        - insert O(1)
+        - delete O(1)
     > Advantages
         - Fast lookups
             *Good collision resolution needed
@@ -20,26 +46,62 @@ Hash Tables:
 
 Stacks:
     > LIFO (Last In First Out)
-    > Used in brownser history, undo/redo in editors and so on
+    > Used in browser history, undo/redo in editors and so on
     > Can be created using arrays and linked lists:
-        - Arrays: can take benefit from memomy cash so it can be a little faster than linked lists
+        - Arrays: can take benefit from memory cash so it can be a little faster than linked lists
         remove the last item is O(1) in arrays,
-        but as the arrays grows you will need to realocate memory.
-        - Linked lists: uses more memory, dont benefit from cash, but handles better itens gorwnth.
-        - BOTH can be used, the best one will dependes on your needs.
+        but as the arrays grows you will need to reallocate memory.
+        - Linked lists: uses more memory, don't benefit from cash, but handles better items growth.
+        - BOTH can be used, the best one will depends on your needs.
     > O of n:
         - lookup O(n)
         - pop O(1)
         - push O(1)
         - peek O(1) - Just View the last item
+    > Advantages
+        - Fast Operations
+        - Fast Peek
+        - Ordered
+    > Disadvantages
+        - Slow Lookup
 
 Queue:
     > FIFO (First In First Out)
     > Can be created using arrays and linked lists:
-        - Arrays: worst option as removing the first elemente will cause the entire array to shift.
+        - Arrays: worst option as removing the first element will cause the entire array to shift.
         - Linked list: faster than the array implementation and do not suffer from list shift problem.
     > O of n:
         - lookup O(n)
         - pop(dequeue) O(1)
         - push(enqueue) O(1)
         - peek O(1) - Just View the first item
+    > Advantages
+        - Fast Operations
+        - Fast Peek
+        - Ordered
+    > Disadvantages
+        - Slow Lookup
+
+Trees:
+    > hierarchical idea
+        - Starts with a single root node and each child of the tree descends from this root node
+        - It has: Root, Parent, Child, Leaf and Sibling
+    > There are more than on type of tree
+    > Type Binary tree:
+        - Each node has just one parent
+        - Each node can have none, one or 2 child
+        > O of n of a balanced Binary Tree:
+            - lookup O(log n) ** log n i excellent in terms of performance as O(1)
+            - insert O(log n)
+            - delete O(log n)
+        > O of n of an unbalanced Binary Tree:
+            **It is possible to balance binary search tree's (AVL tree and Red Black Tree, for example)
+            - lookup O(n)
+            - insert O(n)
+            - delete O(n)
+        > Advantages
+            - Better than O(n)
+            - Ordered
+            - Flexible Size
+        > Disadvantages
+            - No O(1) operations
