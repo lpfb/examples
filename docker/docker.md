@@ -15,9 +15,13 @@ echo \
 sudo apt-get update
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
 sudo docker version
+
 # para rexecutar o docker sem ser no modo sudo
+sudo groupadd docker
 sudo usermod -aG docker $(whoami)
+# Reinicialize o computador ou deslogue e log
 ```
+
 # Entendo o docker run
 Quando rodamos, por exemplo, o comando docker run hello-world, o que acontece é o seguinte:
 1. o docker busca e baixa a imagem no docker Hub
