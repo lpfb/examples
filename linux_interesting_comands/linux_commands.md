@@ -432,6 +432,11 @@ fg %n
 dd if=/dev/zero of=1g.img bs=1 count=0 seek=1G
 ```
 
+# Zerozoization of a hard disk
+```sh
+dd if=/dev/zero of=/dev/<drive partition> bs=1M
+```
+
 # Creating a text file with a fixed text and certain size (10G in this example)
 ```sh
 yes "Some text" | head -n 1000000000 > large-file
