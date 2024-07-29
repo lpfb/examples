@@ -439,5 +439,18 @@ dd if=/dev/zero of=/dev/<drive partition> bs=1M
 
 # Creating a text file with a fixed text and certain size (10G in this example)
 ```sh
-yes "Some text" | head -n 1000000000 > large-file
+yes "12345" | head -n 1000000000 > large-file
+```
+
+# Using squash to compact files and folders
+```sh
+sudo apt install squashfs-tools
+sudo mksquashfs ubuntu_bionic/ ubuntu_bionic.sq -b 1048576 -comp xz -Xdict-size 100%  # compacta
+sudo unsquashfs -f -d ubuntu_bionic/ ubuntu_bionic.sq  # descompacta
+```
+
+# Backup an entire SDCard
+This command will backup the entire SDCard with all partitions.
+```sh
+sudo dd if=/dev/sdXX of=~/sd-card-copy.img
 ```

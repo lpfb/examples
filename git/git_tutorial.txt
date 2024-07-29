@@ -1,3 +1,20 @@
+# Git repository migration
+> Clone the Source Repository:
+git clone --mirror <source_repository_url>
+
+> Navigate to the Cloned Repository
+cd <cloned_repository_directory>
+
+> Add the Destination Repository as a Remote
+git remote add <destination_repository_name> <destination_repository_url>
+
+> Fetch Data from the Destination Repository
+git fetch --all
+
+> Push All Branches and Tags to the Destination Repository
+git push --mirror <destination_repository_name>
+
+
 # Basic concepts
 
 ## Initialize a repository
@@ -354,6 +371,9 @@ If you want a "describe" to fall back to an abbreviated hash if it can't find an
         $ git tag -a <tag version/name> -m "Message here"
     > Creating a tag based on a specific branch change/revision
         $ git tag -a <tag version/name> <revision base, ex: 9fceb02> -m "Message here"
+
+    > Deleting a remote tag
+        $ git push --delete origin <tag_name>
 
     > Pushng a single tag
         $ git push origin <tag_name>
