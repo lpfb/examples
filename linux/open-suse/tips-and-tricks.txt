@@ -1,0 +1,9 @@
+# Update distro
+sudo zypper dup
+
+# Update packets
+sudo zypper up
+
+# Install newly added packages recommended by installed packages
+* In my lenovo laptop, it installed Nvidia driver properly
+sudo zypper inr
